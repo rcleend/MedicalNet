@@ -22,6 +22,9 @@ class BrainS18Dataset(Dataset):
         self.input_D = sets.input_D
         self.input_H = sets.input_H
         self.input_W = sets.input_W
+        print('input D:', self.input_D)
+        print('input H:', self.input_H)
+        print('input W:', self.input_W)
         self.phase = sets.phase
 
     def __nii2tensorarray__(self, data):
