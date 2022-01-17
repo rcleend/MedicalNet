@@ -70,8 +70,6 @@ class BrainS18Dataset(Dataset):
             img = nibabel.load(img_name)
             assert img is not None
 
-            print(img)
-
             # data processing
             img_array = self.__testing_data_process__(img)
 
@@ -196,6 +194,8 @@ class BrainS18Dataset(Dataset):
     def __testing_data_process__(self, data): 
         # crop data according net input size
         data = data.get_data()
+
+        print(data)
 
         # resize data
         data = self.__resize_data__(data)
