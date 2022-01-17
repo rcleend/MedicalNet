@@ -70,6 +70,8 @@ class BrainS18Dataset(Dataset):
             img = nibabel.load(img_name)
             assert img is not None
 
+            print(img)
+
             # data processing
             img_array = self.__testing_data_process__(img)
 
