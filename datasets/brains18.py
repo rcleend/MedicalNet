@@ -73,8 +73,15 @@ class BrainS18Dataset(Dataset):
             # data processing
             img_array = self.__testing_data_process__(img)
 
+            print('BEFORE: ')
+            print(img_array)
+
             # 2 tensor array
             img_array = self.__nii2tensorarray__(img_array)
+
+            print('AFTER: ')
+            print(img_array)
+
 
             return img_array
             
