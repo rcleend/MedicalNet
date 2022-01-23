@@ -20,7 +20,7 @@ class FibrosisDataset(Dataset):
         self.entries = pd.read_csv(root_dir + img_list)
 
         print('Processing {} datas'.format(len(self.entries) + 1))
-        self.img_dir = f'{root_dir}/pre\ processed/images'
+        self.img_dir = f'{root_dir}pre processed/images/'
         self.input_D = sets.input_D
         self.input_H = sets.input_H
         self.input_W = sets.input_W
@@ -46,7 +46,7 @@ class FibrosisDataset(Dataset):
         # TODO get patien ct scan images and convert to 3d tensor
         # x_img = 
         print('loading images')
-        test = self.__load_images__(f'{self.img_dir}/{self.entries.iloc[i,0]}')
+        test = self.__load_images__(self.img_dir + self.entries.iloc[i,0])
         print(test)
 
         x = [x_wks, x_pct, x_smk]
