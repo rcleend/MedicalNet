@@ -33,10 +33,12 @@ def train(data_loader, model, optimizer, scheduler, total_epochs, save_interval,
         log.info('lr = {}'.format(scheduler.get_lr()))
 
         for batch_id, (x_batch, y_batch) in enumerate(data_loader):
+            x_batch, y_batch = x_batch.to
             batch_id_sp = epoch * batches_per_epoch
             optimizer.zero_grad()
 
-            y_pred = model(x_batch)
+            # TODO: pass all values to net and also you metadata
+            y_pred = model(x_batch[2])
 
             # Calculate loss using mean squared error
             loss = mse(y_pred, y_batch)
