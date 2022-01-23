@@ -47,7 +47,7 @@ class FibrosisDataset(Dataset):
         # x_img = 
         print('loading images')
         test = self.__load_images__(self.img_dir + self.entries.iloc[i,0])
-        print(test)
+        print(test.shape())
 
         x = [x_wks, x_pct, x_smk]
 
@@ -57,10 +57,6 @@ class FibrosisDataset(Dataset):
         y_sex = self.entries.iloc[i,5]
 
         y = [y_fvc, y_age, y_sex]
-
-        if i == 1:
-           raise Exception("Oof")
-
 
         # if self.phase == 'train':
         #     print(self.img_list[i])
