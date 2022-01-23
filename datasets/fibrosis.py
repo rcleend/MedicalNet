@@ -16,8 +16,8 @@ import pandas as pd
 class FibrosisDataset(Dataset):
 
     def __init__(self, root_dir, img_list, sets):
-        self.test = pd.read_csv(root_dir + img_list)
-        print("Processing {} rows".format(len(self.test) + 1))
+        self.data = pd.read_csv(root_dir + img_list)
+        print("Processing {} rows".format(len(self.data) + 1))
 
         self.root_dir = root_dir
         self.input_D = sets.input_D
@@ -27,10 +27,10 @@ class FibrosisDataset(Dataset):
 
 
     def __len__(self):
-        return len(self.img_list)
+        return len(self.data)
 
     def __getitem__(self, i):
-        df = self.test[i]
+        df = self.data[i]
         print('get item:')
         print(df)
 
