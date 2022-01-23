@@ -190,7 +190,7 @@ class ResNet(nn.Module):
                                         kernel_size=1,
                                         stride=(1, 1, 1),
                                         bias=False),
-                                        CustomDenseLayer(100)
+                                        # CustomDenseLayer(100)
                                         )
 
         for m in self.modules():
