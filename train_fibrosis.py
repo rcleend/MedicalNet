@@ -37,9 +37,9 @@ def train(data_loader, model, optimizer, scheduler, total_epochs, save_interval,
         # scheduler.step()
         # log.info('lr = {}'.format(scheduler.get_lr()))
         
-    for i, x in enumerate(data_loader):
+    for i, (x,y) in enumerate(data_loader):
         # TODO: Implement training code 
-        print(x)
+        print(x[0])
                             
     print('Finished training')            
 
