@@ -37,9 +37,7 @@ def train(data_loader, model, optimizer, scheduler, total_epochs, save_interval,
             batch_id_sp = epoch * batches_per_epoch
             optimizer.zero_grad()
 
-            print(x_batch.size())
-
-            print(x_batch[0])
+            print(x_batch)
 
             # TODO calculate loss
             # loss = loss_seg
