@@ -101,6 +101,6 @@ class FibrosisDataset(Dataset):
         y_ex_smk = torch.tensor(y_ex_smk,dtype=torch.float)
         y_non_smk = torch.tensor(y_non_smk,dtype=torch.float)
 
-        y = torch.tensor(y_fvc, y_age, y_is_male, y_smk, y_ex_smk, y_non_smk)
+        y = torch.tensor(np.array([y_fvc, y_age, y_is_male, y_smk, y_ex_smk, y_non_smk]))
 
         return x,y
