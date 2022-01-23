@@ -195,8 +195,6 @@ class BrainS18Dataset(Dataset):
         # crop data according net input size
         data = data.get_data()
 
-        print(data)
-
         # resize data
         data = self.__resize_data__(data)
 
