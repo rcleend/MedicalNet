@@ -40,7 +40,7 @@ def train(data_loader, model, optimizer, scheduler, total_epochs, save_interval,
         log.info('lr = {}'.format(scheduler.get_lr()))
 
         for batch_id, (x_batch, y_batch) in enumerate(data_loader):
-            # x_batch, y_batch = x_batch.to(device), y_batch.to(device)
+            y_batch = y_batch.to(device)
             batch_id_sp = epoch * batches_per_epoch
             optimizer.zero_grad()
 
