@@ -38,19 +38,30 @@ class FibrosisDataset(Dataset):
                 images.append(img)
 
         images = np.array(images)
-        print(images[0,0,0,:])
 
         # Remove rgb dimension
         return images[:,:,:,0]
+
+    def __resize_data__(self, data):
+        """
+        Resize the data to the input size
+        """ 
+        [depth, height, width] = data.shape
+        scale = [self.input_D*1.0/depth, self.input_H*1.0/height, self.input_W*1.0/width]  
+        data = ndimage.interpolation.zoom(data, scale, order=0)
+
+        return data
+
 
     def __getitem__(self, i):
         # Create x values (Weeks, Percent, Smoking Status, Images)
         x_wks = self.entries.iloc[i,1]
         x_pct = self.entries.iloc[i,3]
         x_smk = self.entries.iloc[i,6]
-        x_img = self.__load_images__(self.img_dir + self.entries.iloc[i,0])
+        # TODO: evaluate if image actually contains relevant information and is not distorted
+        x_img = self.__resize_data__(self.__load_images__(self.img_dir + self.entries.iloc[i,0]))
 
-        x = [x_wks, x_pct, x_smk]
+        x = [x_wks, x_pct, x_smk, x_img]
 
         # Create y values (FVC, Age, Sex)
         y_fvc = self.entries.iloc[i,2]
@@ -58,10 +69,5 @@ class FibrosisDataset(Dataset):
         y_sex = self.entries.iloc[i,5]
 
         y = [y_fvc, y_age, y_sex]
-
-        # if self.phase == 'train':
-        #     print(self.img_list[i])
-        # elif self.phase == 'test':
-        #     print('test')
 
         return x,y

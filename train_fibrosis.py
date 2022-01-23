@@ -18,28 +18,37 @@ from scipy import ndimage
 import os
 
 def train(data_loader, model, optimizer, scheduler, total_epochs, save_interval, save_folder, sets):
-    # settings
-    # batches_per_epoch = len(data_loader)
-    # log.info('{} epochs in total, {} batches per epoch'.format(total_epochs, batches_per_epoch))
-    # loss_seg = nn.CrossEntropyLoss(ignore_index=-1)
+    batches_per_epoch = len(data_loader)
+    log.info('{} epochs in total, {} batches per epoch'.format(total_epochs, batches_per_epoch))
 
-    # print("Current setting is:")
-    # print(sets)
-    # print("\n\n")     
-    # if not sets.no_cuda:
-    #     loss_seg = loss_seg.cuda()
+    # TODO: calculate loss
+    loss_seg = nn.CrossEntropyLoss(ignore_index=-1)
+
+    model.train()
+    train_time_sp = time.time()
+
+    for epoch in range(total_epochs):
+        log.info('Start epoch {}'.format(epoch))
         
-    # model.train()
-    # train_time_sp = time.time()
-    # for epoch in range(total_epochs):
-        # log.info('Start epoch {}'.format(epoch))
-        
-        # scheduler.step()
-        # log.info('lr = {}'.format(scheduler.get_lr()))
-        
-    for i, (x_batch, y_batch) in enumerate(data_loader):
-        # TODO: Implement training code 
-        print(x)
+        scheduler.step()
+        log.info('lr = {}'.format(scheduler.get_lr()))
+
+        for batch_id, (x_batch, y_batch) in enumerate(data_loader):
+            batch_id_sp = epoch * batches_per_epoch
+            optimizer.zero_grad()
+
+            print(x_batch[0])
+
+            # TODO calculate loss
+            # loss = loss_seg
+            # loss.backward()                
+            # optimizer.step()
+
+            # avg_batch_time = (time.time() - train_time_sp) / (1 + batch_id_sp)
+            # log.info(
+            #         'Batch: {}-{} ({}), loss = {:.3f}, avg_batch_time = {:.3f}'\
+            #         .format(epoch, batch_id, batch_id_sp, loss.item(), avg_batch_time))
+
                             
     print('Finished training')            
 
@@ -70,14 +79,12 @@ if __name__ == '__main__':
     #         print("=> loaded checkpoint '{}' (epoch {})"
     #           .format(sets.resume_path, checkpoint['epoch']))
 
-    # getting data
     sets.phase = 'train'
     if sets.no_cuda:
         sets.pin_memory = False
     else:
         sets.pin_memory = True    
 
-    # TODO: replace with FibrosisDataset()
     training_dataset = FibrosisDataset(sets.data_root, sets.img_list, sets)
     data_loader = DataLoader(training_dataset, batch_size=sets.batch_size, shuffle=True, num_workers=sets.num_workers, pin_memory=sets.pin_memory)
 
