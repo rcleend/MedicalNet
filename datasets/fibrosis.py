@@ -53,13 +53,12 @@ class FibrosisDataset(Dataset):
         return data
 
     def __get_smoking_values(self, i):
-        match self.entries.iloc[i,6]:
-            case 'Currently smokes':
-                return 1, 0, 0 
-            case 'Ex-smoker':
-                return 0, 1, 0
-            case 'Never smoked':
-                return 0, 0, 1
+        if self.entries.iloc[i,6] == 'Currently smokes':
+            return 1, 0, 0 
+        elif self.entries.iloc[i, 6] == 'Ex-smoker':
+            return 0, 1, 0
+        else:
+            return 0, 0, 1
 
 
 
