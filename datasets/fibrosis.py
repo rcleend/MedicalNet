@@ -35,6 +35,7 @@ class FibrosisDataset(Dataset):
         # Create x (Images, Weeks, Percent, Smoking Status)
         # x_img
         x_wks = self.entries.iloc[i,1]
+        print('weeks:', x_wks)
         x_pct = self.entries.iloc[i,3]
         x_smk = self.entries.iloc[i,6]
 
