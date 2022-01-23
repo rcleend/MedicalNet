@@ -19,31 +19,29 @@ import os
 
 def train(data_loader, model, optimizer, scheduler, total_epochs, save_interval, save_folder, sets):
     # settings
-    batches_per_epoch = len(data_loader)
-    log.info('{} epochs in total, {} batches per epoch'.format(total_epochs, batches_per_epoch))
-    loss_seg = nn.CrossEntropyLoss(ignore_index=-1)
+    # batches_per_epoch = len(data_loader)
+    # log.info('{} epochs in total, {} batches per epoch'.format(total_epochs, batches_per_epoch))
+    # loss_seg = nn.CrossEntropyLoss(ignore_index=-1)
 
-    print("Current setting is:")
-    print(sets)
-    print("\n\n")     
-    if not sets.no_cuda:
-        loss_seg = loss_seg.cuda()
+    # print("Current setting is:")
+    # print(sets)
+    # print("\n\n")     
+    # if not sets.no_cuda:
+    #     loss_seg = loss_seg.cuda()
         
-    model.train()
-    train_time_sp = time.time()
-    for epoch in range(total_epochs):
-        log.info('Start epoch {}'.format(epoch))
+    # model.train()
+    # train_time_sp = time.time()
+    # for epoch in range(total_epochs):
+        # log.info('Start epoch {}'.format(epoch))
         
-        scheduler.step()
-        log.info('lr = {}'.format(scheduler.get_lr()))
+        # scheduler.step()
+        # log.info('lr = {}'.format(scheduler.get_lr()))
         
-        for batch_id, batch_data in enumerate(data_loader):
-            # TODO: Implement training code 
-            print('Training')
+    for i, x in enumerate(data_loader):
+        # TODO: Implement training code 
+        print(x)
                             
     print('Finished training')            
-    if sets.ci_test:
-        exit()
 
 
 if __name__ == '__main__':
@@ -84,4 +82,4 @@ if __name__ == '__main__':
     data_loader = DataLoader(training_dataset, batch_size=sets.batch_size, shuffle=True, num_workers=sets.num_workers, pin_memory=sets.pin_memory)
 
     # training
-    # train(data_loader, model, optimizer, scheduler, total_epochs=sets.n_epochs, save_interval=sets.save_intervals, save_folder=sets.save_folder, sets=sets) 
+    train(data_loader, model, optimizer, scheduler, total_epochs=sets.n_epochs, save_interval=sets.save_intervals, save_folder=sets.save_folder, sets=sets) 
