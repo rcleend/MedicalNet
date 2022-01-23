@@ -36,7 +36,12 @@ class FibrosisDataset(Dataset):
             img = cv2.imread(f'{images_path}/{filename}')
             if img is not None:
                 images.append(img)
-        return np.array(images)
+
+        # Create np array
+        images = np.array(images)
+        # Remove rgb dimension
+        images = images[:,:,:,0]
+        return images
 
     def __getitem__(self, i):
         # Create x values (Weeks, Percent, Smoking Status, Images)
@@ -46,8 +51,8 @@ class FibrosisDataset(Dataset):
         # TODO get patien ct scan images and convert to 3d tensor
         # x_img = 
         print('loading images')
-        test = self.__load_images__(self.img_dir + self.entries.iloc[i,0])
-        print(test.shape)
+        x_img = self.__load_images__(self.img_dir + self.entries.iloc[i,0])
+        print(x_img.shape)
 
         x = [x_wks, x_pct, x_smk]
 
