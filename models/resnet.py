@@ -226,17 +226,19 @@ class ResNet(nn.Module):
         return nn.Sequential(*layers)
 
     def forward(self, x):
-        x = self.conv1(x)
-        x = self.bn1(x)
-        x = self.relu(x)
-        x = self.maxpool(x)
-        x = self.layer1(x)
-        x = self.layer2(x)
-        x = self.layer3(x)
-        x = self.layer4(x)
-        x = self.conv_seg(x)
+        img = x[2]
+        out = self.conv1(img)
+        out = self.bn1(out)
+        out = self.relu(out)
+        out = self.maxpool(out)
+        out = self.layer1(out)
+        out = self.layer2(out)
+        out = self.layer3(out)
+        out = self.layer4(out)
+        # TODO: add other x meta data input to conv_seg
+        out = self.conv_seg(out)
 
-        return x
+        return out
 
 def resnet10(**kwargs):
     """Constructs a ResNet-18 model.

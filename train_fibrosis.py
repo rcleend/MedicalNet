@@ -16,6 +16,7 @@ import time
 from utils.logger import log
 from scipy import ndimage
 import os
+model_stats = summary(your_model, (3, 28, 28), verbose=0)
 
 def train(data_loader, model, optimizer, scheduler, total_epochs, save_interval, save_folder, sets):
     batches_per_epoch = len(data_loader)
@@ -42,8 +43,7 @@ def train(data_loader, model, optimizer, scheduler, total_epochs, save_interval,
             batch_id_sp = epoch * batches_per_epoch
             optimizer.zero_grad()
 
-            # TODO: pass all values to net and also you metadata
-            y_pred = model(x_batch[2])
+            y_pred = model(x_batch)
 
             # Calculate loss using mean squared error
             loss = mse(y_pred, y_batch)
@@ -84,6 +84,8 @@ if __name__ == '__main__':
     torch.manual_seed(sets.manual_seed)
     model, parameters = generate_model(sets) 
 
+    model_stats = summary(model, (56,448,448))
+
     # optimizer
     params = [
             { 'params': parameters['base_parameters'], 'lr': sets.learning_rate }, 
@@ -112,4 +114,4 @@ if __name__ == '__main__':
     data_loader = DataLoader(training_dataset, batch_size=sets.batch_size, shuffle=True, num_workers=sets.num_workers, pin_memory=sets.pin_memory)
 
     # training
-    train(data_loader, model, optimizer, scheduler, total_epochs=sets.n_epochs, save_interval=sets.save_intervals, save_folder=sets.save_folder, sets=sets) 
+    # train(data_loader, model, optimizer, scheduler, total_epochs=sets.n_epochs, save_interval=sets.save_intervals, save_folder=sets.save_folder, sets=sets) 
