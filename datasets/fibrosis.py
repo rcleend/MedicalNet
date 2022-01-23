@@ -38,7 +38,7 @@ class FibrosisDataset(Dataset):
                 images.append(img)
 
         images = np.array(images)
-        print(len(images[4]))
+        print(len(images[0,0,0,:]))
 
         # Remove rgb dimension
         return images[:,:,:,0]
