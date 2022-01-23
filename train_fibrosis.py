@@ -16,7 +16,8 @@ import time
 from utils.logger import log
 from scipy import ndimage
 import os
-model_stats = summary(your_model, (3, 28, 28), verbose=0)
+from torchsummary import summary
+
 
 def train(data_loader, model, optimizer, scheduler, total_epochs, save_interval, save_folder, sets):
     batches_per_epoch = len(data_loader)
