@@ -5,6 +5,7 @@ from torch.autograd import Variable
 import math
 from functools import partial
 
+
 __all__ = [
     'ResNet', 'resnet10', 'resnet18', 'resnet34', 'resnet50', 'resnet101',
     'resnet152', 'resnet200'
@@ -189,7 +190,7 @@ class ResNet(nn.Module):
                                         kernel_size=1,
                                         stride=(1, 1, 1),
                                         bias=False),
-                                        CustomDenseLayer(100)
+                                        # CustomDenseLayer(100)
                                         )
 
         for m in self.modules():
