@@ -21,8 +21,7 @@ def train(data_loader, model, optimizer, scheduler, total_epochs, save_interval,
     batches_per_epoch = len(data_loader)
     log.info('{} epochs in total, {} batches per epoch'.format(total_epochs, batches_per_epoch))
 
-    # TODO: calculate loss
-    loss_seg = nn.CrossEntropyLoss(ignore_index=-1)
+    mse = nn.MSELoss()
 
     model.train()
     train_time_sp = time.time()
@@ -37,21 +36,38 @@ def train(data_loader, model, optimizer, scheduler, total_epochs, save_interval,
             batch_id_sp = epoch * batches_per_epoch
             optimizer.zero_grad()
 
-            print(x_batch)
+            y_pred = model(x_batch)
 
-            # TODO calculate loss
-            # loss = loss_seg
-            # loss.backward()                
-            # optimizer.step()
+            # Calculate loss using mean squared error
+            loss = mse(y_pred, y_batch)
+            loss.backward()                
+            optimizer.step()
 
-            # avg_batch_time = (time.time() - train_time_sp) / (1 + batch_id_sp)
-            # log.info(
-            #         'Batch: {}-{} ({}), loss = {:.3f}, avg_batch_time = {:.3f}'\
-            #         .format(epoch, batch_id, batch_id_sp, loss.item(), avg_batch_time))
+            avg_batch_time = (time.time() - train_time_sp) / (1 + batch_id_sp)
+            log.info(
+                    'Batch: {}-{} ({}), loss = {:.3f}, avg_batch_time = {:.3f}'\
+                    .format(epoch, batch_id, batch_id_sp, loss.item(), avg_batch_time))
 
-                            
+            # Save model on specific intervals
+            if batch_id_sp % save_interval == 0:
+                save_model(save_folder, model, optimizer, epoch, batch_id)
+    
     print('Finished training')            
 
+
+def save_model(save_folder, model, optimizer, epoch, batch_id):
+    model_save_path = '{}_epoch_{}_batch_{}.pth.tar'.format(save_folder, epoch, batch_id)
+    model_save_dir = os.path.dirname(model_save_path)
+    if not os.path.exists(model_save_dir):
+        os.makedirs(model_save_dir)
+                    
+    log.info('Save checkpoints: epoch = {}, batch_id = {}'.format(epoch, batch_id)) 
+    torch.save({
+                'ecpoch': epoch,
+                'batch_id': batch_id,
+                'state_dict': model.state_dict(),
+                'optimizer': optimizer.state_dict()},
+                model_save_path)
 
 if __name__ == '__main__':
     # settting

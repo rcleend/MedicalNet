@@ -167,28 +167,29 @@ class ResNet(nn.Module):
 
         self.conv_seg = nn.Sequential(
                                         nn.ConvTranspose3d(
-                                        512 * block.expansion,
-                                        32,
-                                        2,
-                                        stride=2
+                                            512 * block.expansion,
+                                            32,
+                                            2,
+                                            stride=2
                                         ),
                                         nn.BatchNorm3d(32),
                                         nn.ReLU(inplace=True),
                                         nn.Conv3d(
-                                        32,
-                                        32,
-                                        kernel_size=3,
-                                        stride=(1, 1, 1),
-                                        padding=(1, 1, 1),
-                                        bias=False), 
+                                            32,
+                                            32,
+                                            kernel_size=3,
+                                            stride=(1, 1, 1),
+                                            padding=(1, 1, 1),
+                                            bias=False), 
                                         nn.BatchNorm3d(32),
                                         nn.ReLU(inplace=True),
                                         nn.Conv3d(
-                                        32,
-                                        100,
-                                        kernel_size=1,
-                                        stride=(1, 1, 1),
-                                        bias=False),
+                                            32,
+                                            100,
+                                            kernel_size=1,
+                                            stride=(1, 1, 1),
+                                            bias=False
+                                        ),
                                         CustomDenseLayer(100)
                                         )
 
@@ -235,6 +236,7 @@ class ResNet(nn.Module):
         x = self.layer3(x)
         x = self.layer4(x)
         x = self.conv_seg(x)
+        print(x)
 
         return x
 

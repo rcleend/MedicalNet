@@ -52,22 +52,32 @@ class FibrosisDataset(Dataset):
 
         return data
 
+    def __get_smoking_values(self, i):
+        match self.entries.iloc[i,6]:
+            case 'Currently smokes':
+                return 1, 0, 0 
+            case 'Ex-smoker':
+                return 0, 1, 0
+            case 'Never smoked':
+                return 0, 0, 1
+
+
 
     def __getitem__(self, i):
-        # Create x values (Weeks, Percent, Smoking Status, Images)
+        # Create x values (Weeks, Percent, Images)
         x_wks = self.entries.iloc[i,1]
         x_pct = self.entries.iloc[i,3]
-        x_smk = self.entries.iloc[i,6]
         # TODO: evaluate if image actually contains relevant information and is not distorted
         x_img = self.__resize_data__(self.__load_images__(self.img_dir + self.entries.iloc[i,0]))
 
-        x = [x_wks, x_pct, x_smk, x_img]
+        x = [x_wks, x_pct, x_img]
 
-        # Create y values (FVC, Age, Sex)
+        # Create y values (FVC, Age, Sex, Smoking)
         y_fvc = self.entries.iloc[i,2]
         y_age = self.entries.iloc[i,4]
         y_sex = self.entries.iloc[i,5]
+        y_smk, y_ex_smk, y_non_smk = self.__get_smoking_values(i)
 
-        y = [y_fvc, y_age, y_sex]
+        y = [y_fvc, y_age, y_sex, y_smk, y_ex_smk, y_non_smk]
 
         return x,y
