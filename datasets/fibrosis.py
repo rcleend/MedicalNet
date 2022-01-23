@@ -7,6 +7,7 @@ import math
 import os
 import cv2
 import random
+import torch
 
 import numpy as np
 from torch.utils.data import Dataset
@@ -84,9 +85,9 @@ class FibrosisDataset(Dataset):
         x = [x_wks, x_pct, x_img]
 
         # Create y values (FVC, Age, Sex, Smoking)
-        y_fvc = self.entries.iloc[i,2]
-        y_age = self.entries.iloc[i,4]
-        y_sex = self.entries.iloc[i,5]
+        y_fvc = torch.tensor(self.entries.iloc[i,2])
+        y_age = torch.tensor(self.entries.iloc[i,4])
+        y_sex = torch.tensor(self.entries.iloc[i,5])
         y_smk, y_ex_smk, y_non_smk = self.__get_smoking_values(i)
 
         y = [y_fvc, y_age, y_sex, y_smk, y_ex_smk, y_non_smk]

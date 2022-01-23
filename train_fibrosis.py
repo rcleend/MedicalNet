@@ -47,7 +47,7 @@ def train(data_loader, model, optimizer, scheduler, total_epochs, save_interval,
             y_pred = model(x_batch[2])
 
             # Calculate loss using mean squared error
-            loss = mse(y_pred, torch.tensor(y_batch))
+            loss = mse(y_pred, y_batch)
             loss.backward()                
             optimizer.step()
 
