@@ -45,6 +45,7 @@ class FibrosisDataset(Dataset):
         x_smk = self.entries.iloc[i,6]
         # TODO get patien ct scan images and convert to 3d tensor
         # x_img = 
+        print('loading images')
         print(_load_images(f'{self.img_dir}/{self.entries.iloc[i,0]}'))
 
         x = [x_wks, x_pct, x_smk]
