@@ -38,4 +38,4 @@ class FibrosisDataset(Dataset):
         # elif self.phase == 'test':
         #     print('test')
 
-        return self.entries[i]
+        return i
