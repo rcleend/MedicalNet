@@ -31,10 +31,12 @@ class FibrosisDataset(Dataset):
 
     def __getitem__(self, i):
         df = self.data[i]
+        print('get item:')
+        print(df)
 
         # TODO: Get corresponding ct scan images and change them to tensor values
         # TODO: Get FVC value as y 
         # TODO: Get 
 
 
-        return self.data[i]
+        return i
