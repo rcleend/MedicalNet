@@ -26,6 +26,11 @@ def train(data_loader, model, optimizer, scheduler, total_epochs, save_interval,
     model.train()
     train_time_sp = time.time()
 
+    if torch.cuda.is_available():
+        device = torch.device('cuda')
+    else:
+        device = torch.device('cpu')
+
     for epoch in range(total_epochs):
         log.info('Start epoch {}'.format(epoch))
         
@@ -33,7 +38,7 @@ def train(data_loader, model, optimizer, scheduler, total_epochs, save_interval,
         log.info('lr = {}'.format(scheduler.get_lr()))
 
         for batch_id, (x_batch, y_batch) in enumerate(data_loader):
-            x_batch, y_batch = x_batch.to
+            x_batch, y_batch = x_batch.to(device), y_batch.to(device)
             batch_id_sp = epoch * batches_per_epoch
             optimizer.zero_grad()
 
