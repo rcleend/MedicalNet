@@ -29,7 +29,7 @@ class FibrosisDataset(Dataset):
 
 
     def __len__(self):
-        return len(self.entries) + 1
+        return len(self.entries)
 
     def __getitem__(self, i):
         # Create x (Images, Weeks, Percent, Smoking Status)
