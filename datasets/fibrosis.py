@@ -27,7 +27,7 @@ class FibrosisDataset(Dataset):
 
 
     def __len__(self):
-        return len(self.data)
+        return self.data.shape[0]
 
     def __getitem__(self, i):
         df = self.data[i]
