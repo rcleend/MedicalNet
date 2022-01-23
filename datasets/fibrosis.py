@@ -90,16 +90,16 @@ class FibrosisDataset(Dataset):
         x = [x_wks, x_pct, x_img]
 
         # Create y values (FVC, Age, Sex, Smoking)
-        y_fvc = torch.tensor(self.entries.iloc[i,2],dtype=torch.float64)
-        y_age = torch.tensor(self.entries.iloc[i,4],dtype=torch.float64)
-        y_is_male = torch.tensor(self.__get_sex(i),dtype=torch.float64)
+        y_fvc = torch.tensor(self.entries.iloc[i,2],dtype=torch.float)
+        y_age = torch.tensor(self.entries.iloc[i,4],dtype=torch.float)
+        y_is_male = torch.tensor(self.__get_sex(i),dtype=torch.float)
 
         # Get smoking values
         y_smk, y_ex_smk, y_non_smk = self.__get_smoking_values(i)
-        y_smk = torch.tensor(y_smk,dtype=torch.float64)
-        y_ex_smk = torch.tensor(y_ex_smk,dtype=torch.float64)
-        y_ex_smk = torch.tensor(y_ex_smk,dtype=torch.float64)
-        y_non_smk = torch.tensor(y_non_smk,dtype=torch.float64)
+        y_smk = torch.tensor(y_smk,dtype=torch.float)
+        y_ex_smk = torch.tensor(y_ex_smk,dtype=torch.float)
+        y_ex_smk = torch.tensor(y_ex_smk,dtype=torch.float)
+        y_non_smk = torch.tensor(y_non_smk,dtype=torch.float)
 
         y = torch.tensor([y_fvc, y_age, y_is_male, y_smk, y_ex_smk, y_non_smk])
 
