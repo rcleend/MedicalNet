@@ -69,6 +69,11 @@ class FibrosisDataset(Dataset):
         else:
             return 0, 0, 1
 
+    def __get_sex(self, i):
+        if self.entries.iloc[i,5] == 'Male':
+            return 1
+        else:
+            return 0
 
 
     def __getitem__(self, i):
@@ -87,8 +92,14 @@ class FibrosisDataset(Dataset):
         # Create y values (FVC, Age, Sex, Smoking)
         y_fvc = torch.tensor(self.entries.iloc[i,2])
         y_age = torch.tensor(self.entries.iloc[i,4])
-        y_sex = torch.tensor(self.entries.iloc[i,5])
+        y_sex = torch.tensor(self.__get_sex[i])
+
+        # Get smoking values
         y_smk, y_ex_smk, y_non_smk = self.__get_smoking_values(i)
+        y_smk = torch.tensor(y_smk)
+        y_ex_smk = torch.tensor(y_ex_smk)
+        y_ex_smk = torch.tensor(y_ex_smk)
+        y_non_smk = torch.tensor(y_non_smk)
 
         y = [y_fvc, y_age, y_sex, y_smk, y_ex_smk, y_non_smk]
 
