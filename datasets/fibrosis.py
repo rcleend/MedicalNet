@@ -32,10 +32,25 @@ class FibrosisDataset(Dataset):
         return len(self.entries) + 1
 
     def __getitem__(self, i):
+        # Create x (Images, Weeks, Percent, Smoking Status)
+        # x_img
+        x_wks = self.entries.iloc[i,1]
+        x_pct = self.entries.iloc[i,3]
+        x_smk = self.entries.iloc[i,6]
+
+        x = [x_wks, x_pct, x_smk]
+
+        # Create y (FVC, Age, Sex)
+        y_fvc = self.entries.iloc[i,2]
+        y_age = self.entries.iloc[i,4]
+        y_sex = self.entries.iloc[i,5]
+
+        y = [y_fvc, y_age, y_sex]
+
 
         # if self.phase == 'train':
         #     print(self.img_list[i])
         # elif self.phase == 'test':
         #     print('test')
 
-        return self.entries.iloc[i]
+        return (x,y)
