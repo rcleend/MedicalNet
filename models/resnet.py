@@ -211,6 +211,7 @@ class ResNet(nn.Module):
         x = self.layer3(x)
         x = self.layer4(x)
         x = self.conv_seg(x)
+        print(x)
 
         return x
 
