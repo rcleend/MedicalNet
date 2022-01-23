@@ -92,7 +92,7 @@ class FibrosisDataset(Dataset):
         # Create y values (FVC, Age, Sex, Smoking)
         y_fvc = torch.tensor(self.entries.iloc[i,2])
         y_age = torch.tensor(self.entries.iloc[i,4])
-        y_is_male = self.__get_sex[i]
+        y_is_male = torch.tensor(self.__get_sex(i))
 
         # Get smoking values
         y_smk, y_ex_smk, y_non_smk = self.__get_smoking_values(i)
