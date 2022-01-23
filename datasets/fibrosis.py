@@ -5,6 +5,7 @@ Written by Whalechen
 
 import math
 import os
+import cv2
 import random
 
 import numpy as np
@@ -16,12 +17,10 @@ import pandas as pd
 class FibrosisDataset(Dataset):
 
     def __init__(self, root_dir, img_list, sets):
-        # with open(root_dir + img_list, 'r') as f:
-        #     self.entries = [line.strip() for line in f]
         self.entries = pd.read_csv(root_dir + img_list)
 
-        print("Processing {} datas".format(len(self.entries) + 1))
-        self.root_dir = root_dir
+        print('Processing {} datas'.format(len(self.entries) + 1))
+        self.img_dir = f'{root_dir}/pre\ processed/images'
         self.input_D = sets.input_D
         self.input_H = sets.input_H
         self.input_W = sets.input_W
@@ -31,17 +30,26 @@ class FibrosisDataset(Dataset):
     def __len__(self):
         return len(self.entries)
 
+    def _load_images(images_path):
+        images = []
+        for filename in os.listdir(images_path):
+            img = cv2.imread(f'{images_path}/{filename}')
+            if img is not None:
+                images.append(img)
+        return images
+
     def __getitem__(self, i):
-        # Create x (Images, Weeks, Percent, Smoking Status)
-        # x_img
+        # Create x values (Weeks, Percent, Smoking Status, Images)
         x_wks = self.entries.iloc[i,1]
-        print('weeks:', x_wks)
         x_pct = self.entries.iloc[i,3]
         x_smk = self.entries.iloc[i,6]
+        # TODO get patien ct scan images and convert to 3d tensor
+        # x_img = 
+        print(_load_images(f'{self.img_dir}/{self.entries.iloc[i,0]}'))
 
         x = [x_wks, x_pct, x_smk]
 
-        # Create y (FVC, Age, Sex)
+        # Create y values (FVC, Age, Sex)
         y_fvc = self.entries.iloc[i,2]
         y_age = self.entries.iloc[i,4]
         y_sex = self.entries.iloc[i,5]
