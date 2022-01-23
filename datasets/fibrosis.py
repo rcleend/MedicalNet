@@ -30,7 +30,7 @@ class FibrosisDataset(Dataset):
     def __len__(self):
         return len(self.entries)
 
-    def __load_images__(images_path):
+    def __load_images__(self, images_path):
         images = []
         for filename in os.listdir(images_path):
             img = cv2.imread(f'{images_path}/{filename}')
