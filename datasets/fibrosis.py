@@ -58,6 +58,9 @@ class FibrosisDataset(Dataset):
 
         y = [y_fvc, y_age, y_sex]
 
+        if i == 1:
+           raise Exception("Oof")
+
 
         # if self.phase == 'train':
         #     print(self.img_list[i])
