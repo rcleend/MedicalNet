@@ -30,7 +30,7 @@ class FibrosisDataset(Dataset):
     def __len__(self):
         return len(self.entries)
 
-    def _load_images(images_path):
+    def __load_images__(images_path):
         images = []
         for filename in os.listdir(images_path):
             img = cv2.imread(f'{images_path}/{filename}')
@@ -46,7 +46,8 @@ class FibrosisDataset(Dataset):
         # TODO get patien ct scan images and convert to 3d tensor
         # x_img = 
         print('loading images')
-        print(_load_images(f'{self.img_dir}/{self.entries.iloc[i,0]}'))
+        test = self.__load_images__(f'{self.img_dir}/{self.entries.iloc[i,0]}')
+        print(test)
 
         x = [x_wks, x_pct, x_smk]
 
