@@ -87,7 +87,7 @@ class FibrosisDataset(Dataset):
                     )
                 )
 
-        x = torch.tensor([x_wks, x_pct, x_img])
+        x = [x_wks, x_pct, x_img]
 
         # Create y values (FVC, Age, Sex, Smoking)
         y_fvc = self.entries.iloc[i,2]
