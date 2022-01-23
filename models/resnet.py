@@ -125,7 +125,7 @@ class CustomDenseLayer(nn.Module):
     self.softmax = nn.Softmax()
 
   def forward(self, x):
-    #   x = self.flatten(x)
+      x = self.flatten(x)
       x = self.linear(x)
       x[:,0] = self.relu(x[:,0]) #FVC value
       x[:,1] = self.relu(x[:,1]) ## Age
@@ -190,7 +190,7 @@ class ResNet(nn.Module):
                                         kernel_size=1,
                                         stride=(1, 1, 1),
                                         bias=False),
-                                        CustomDenseLayer(100)
+                                        # CustomDenseLayer(100)
                                         )
 
         for m in self.modules():
