@@ -52,6 +52,14 @@ class FibrosisDataset(Dataset):
 
         return data
 
+    def __ct2tensorarray__(self, data):
+        [z, y, x] = data.shape
+        new_data = np.reshape(data, [1, z, y, x])
+        new_data = new_data.astype("float32")
+            
+        return new_data
+
+
     def __get_smoking_values(self, i):
         if self.entries.iloc[i,6] == 'Currently smokes':
             return 1, 0, 0 
@@ -67,7 +75,11 @@ class FibrosisDataset(Dataset):
         x_wks = self.entries.iloc[i,1]
         x_pct = self.entries.iloc[i,3]
         # TODO: evaluate if image actually contains relevant information and is not distorted
-        x_img = self.__resize_data__(self.__load_images__(self.img_dir + self.entries.iloc[i,0]))
+        x_img = self.__ct2tensorarray__(
+                    self.__resize_data__(
+                        self.__load_images__(self.img_dir + self.entries.iloc[i,0])
+                    )
+                )
 
         x = [x_wks, x_pct, x_img]
 
