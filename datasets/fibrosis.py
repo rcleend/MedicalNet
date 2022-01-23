@@ -36,7 +36,7 @@ class FibrosisDataset(Dataset):
             img = cv2.imread(f'{images_path}/{filename}')
             if img is not None:
                 images.append(img)
-        return pd.DataFrame(images)
+        return np.array(images)
 
     def __getitem__(self, i):
         # Create x values (Weeks, Percent, Smoking Status, Images)
@@ -47,7 +47,7 @@ class FibrosisDataset(Dataset):
         # x_img = 
         print('loading images')
         test = self.__load_images__(self.img_dir + self.entries.iloc[i,0])
-        print(test.shape())
+        print(test.shape)
 
         x = [x_wks, x_pct, x_smk]
 
