@@ -25,6 +25,9 @@ def train(data_loader, model, optimizer, scheduler, total_epochs, save_interval,
 
     mse = nn.MSELoss()
 
+    # Enable anomaly detection in backward pass
+    torch.autograd.set_detect_anomaly(True)
+
     model.train()
     train_time_sp = time.time()
 
