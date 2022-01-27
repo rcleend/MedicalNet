@@ -117,20 +117,19 @@ class CustomDenseLayer(nn.Module):
   def __init__(self, input=100):
     super().__init__()
     self.input = input
-    self.activations = [nn.ReLU(inplace=False), nn.LeakyReLU() , nn.Sigmoid()]
-    self.relu = nn.ReLU()
+    self.relu = nn.ReLU(inplace=False)
     self.sigmoid = nn.Sigmoid()
     self.flatten = nn.Flatten()
     self.linear = nn.Linear(input,6)
     self.softmax = nn.Softmax()
-
   def forward(self, x):
       x = self.flatten(x)
       x = self.linear(x)
-      x[:,0] = self.relu(x[:,0]) #FVC value
-      x[:,1] = self.relu(x[:,1]) ## Age
-      x[:,2] = self.sigmoid(x[:,2]) ##Male/female
-      x[:,3:6] = self.softmax(x[:,3:6])
+      #note: we clone the x tensors to prevent modification before computing the gradient
+      x[:,0] = self.relu(x[:,0].clone()) #FVC value
+      x[:,1] = self.relu(x[:,1].clone()) ## Age
+      x[:,2] = self.sigmoid(x[:,2].clone()) ##Male/female
+      x[:,3:6] = self.softmax(x[:,3:6].clone())
       return x
 
 class ResNet(nn.Module):
