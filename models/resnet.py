@@ -122,6 +122,7 @@ class CustomDenseLayer(nn.Module):
     self.flatten = nn.Flatten()
     self.linear = nn.Linear(input,6)
     self.softmax = nn.Softmax()
+
   def forward(self, x):
       x = self.flatten(x)
       x = self.linear(x)
