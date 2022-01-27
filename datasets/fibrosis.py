@@ -23,7 +23,6 @@ class FibrosisDataset(Dataset):
     def __init__(self, root_dir, img_list, sets):
         self.entries = pd.read_csv(root_dir + img_list)
         # TODO: Replace with tensor also containing meta data
-        self.patient = torch.empty((3,256,256,self.z_len))
 
         print('Processing {} datas'.format(len(self.entries) + 1))
         self.img_dir = f'{root_dir}pre processed/images/'
@@ -32,6 +31,8 @@ class FibrosisDataset(Dataset):
         self.input_W = sets.input_W
         self.phase = sets.phase
 
+
+        self.patient = torch.empty((3,256,256,30))
 
     def __len__(self):
         return len(self.entries)
