@@ -19,6 +19,7 @@ import os
 from torchsummary import summary
 
 
+
 def train(data_loader, model, optimizer, scheduler, total_epochs, save_interval, save_folder, sets):
     batches_per_epoch = len(data_loader)
     log.info('{} epochs in total, {} batches per epoch'.format(total_epochs, batches_per_epoch))

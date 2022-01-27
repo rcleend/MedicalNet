@@ -14,6 +14,9 @@ from torch.utils.data import Dataset
 import nibabel
 from scipy import ndimage
 import pandas as pd
+from torchvision.io import ImageReadMode
+from torchvision.io import read_image
+
 
 class FibrosisDataset(Dataset):
 
@@ -34,7 +37,11 @@ class FibrosisDataset(Dataset):
     def __load_images__(self, images_path):
         images = []
         for filename in os.listdir(images_path):
-            img = cv2.imread(f'{images_path}/{filename}')
+
+            # self.patient[:,:,:,z] = 
+
+            img = read_image(f'{images_path}/{filename}', mode=ImageReadMode.RGB)
+
             if img is not None:
                 images.append(img)
 
