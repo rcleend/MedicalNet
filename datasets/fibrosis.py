@@ -22,6 +22,8 @@ class FibrosisDataset(Dataset):
 
     def __init__(self, root_dir, img_list, sets):
         self.entries = pd.read_csv(root_dir + img_list)
+        # TODO: Replace with tensor also containing meta data
+        self.patient = torch.empty((3,256,256,self.z_len))
 
         print('Processing {} datas'.format(len(self.entries) + 1))
         self.img_dir = f'{root_dir}pre processed/images/'
@@ -35,20 +37,8 @@ class FibrosisDataset(Dataset):
         return len(self.entries)
 
     def __load_images__(self, images_path):
-        images = []
-        for filename in os.listdir(images_path):
-
-            # self.patient[:,:,:,z] = 
-
-            img = read_image(f'{images_path}/{filename}', mode=ImageReadMode.RGB)
-
-            if img is not None:
-                images.append(img)
-
-        images = np.array(images)
-
-        # Remove rgb dimension
-        return images[:,:,:,0]
+        for i, filename in enumerate(os.listdir(images_path)):
+            self.patient[:,:,:,i] = read_image(f'{images_path}/{filename}', mode=ImageReadMode.RGB)
 
     def __resize_data__(self, data):
         """
@@ -85,29 +75,27 @@ class FibrosisDataset(Dataset):
 
     def __getitem__(self, i):
         # Create x values (Weeks, Percent, Images)
-        x_wks = self.entries.iloc[i,1]
-        x_pct = self.entries.iloc[i,3]
+        # x_wks = self.entries.iloc[i,1]
+        # x_pct = self.entries.iloc[i,3]
         # TODO: evaluate if image actually contains relevant information and is not distorted
-        x_img = self.__ct2tensorarray__(
-                    self.__resize_data__(
-                        self.__load_images__(self.img_dir + self.entries.iloc[i,0])
-                    )
-                )
+        # x_img = self.__ct2tensorarray__(
+        #             self.__resize_data__(
+        #                 self.__load_images__(self.img_dir + self.entries.iloc[i,0])
+        #             )
+        #         )
 
-        x = [x_wks, x_pct, x_img]
+        # x = [x_wks, x_pct, x_img]
+
+        self.__load_images__(self.img_dir + self.entries.iloc(i,0))
 
         # Create y values (FVC, Age, Sex, Smoking)
-        y_fvc = torch.tensor(self.entries.iloc[i,2],dtype=torch.float)
-        y_age = torch.tensor(self.entries.iloc[i,4],dtype=torch.float)
-        y_is_male = torch.tensor(self.__get_sex(i),dtype=torch.float)
+        y_fvc = self.entries.iloc[i,2]
+        y_age = self.entries.iloc[i,4]
+        y_is_male = self.__get_sex(i)
 
         # Get smoking values
         y_smk, y_ex_smk, y_non_smk = self.__get_smoking_values(i)
-        y_smk = torch.tensor(y_smk,dtype=torch.float)
-        y_ex_smk = torch.tensor(y_ex_smk,dtype=torch.float)
-        y_ex_smk = torch.tensor(y_ex_smk,dtype=torch.float)
-        y_non_smk = torch.tensor(y_non_smk,dtype=torch.float)
 
-        y = torch.tensor(np.array([y_fvc, y_age, y_is_male, y_smk, y_ex_smk, y_non_smk]))
+        y = torch.tensor(y_fvc, y_age, y_is_male, y_smk, y_ex_smk, y_non_smk)
 
-        return x,y
+        return self.patient,y
