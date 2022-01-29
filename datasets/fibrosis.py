@@ -97,6 +97,6 @@ class FibrosisDataset(Dataset):
         # Get smoking values
         y_smk, y_ex_smk, y_non_smk = self.__get_smoking_values(i)
 
-        y = torch.tensor(y_fvc, y_age, y_is_male, y_smk, y_ex_smk, y_non_smk)
+        y = np.array([y_fvc, y_age, y_is_male, y_smk, y_ex_smk, y_non_smk])
 
-        return self.patient,y
+        return self.patient, y
