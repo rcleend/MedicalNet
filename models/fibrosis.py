@@ -4,7 +4,7 @@ import torch.nn.functional as F
 from torch.autograd import Variable
 import math
 from functools import partial
-from resnet import resnet10
+from models.resnet import resnet10
 
 
 class MedicalNet(nn.Module):
