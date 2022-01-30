@@ -17,6 +17,7 @@ from utils.logger import log
 from scipy import ndimage
 import os
 from torchsummary import summary
+from models.fibrosis import MedicalNet
 
 
 
@@ -87,12 +88,21 @@ def save_model(save_folder, model, optimizer, epoch, batch_id):
 if __name__ == '__main__':
     # settting
     sets = parse_opts()   
+    device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
     
     # getting model
     torch.manual_seed(sets.manual_seed)
-    model, parameters = generate_model(sets) 
+    model = MedicalNet(path_to_weights="pretrain/resnet_10.pth", device=device)
 
-    # model_stats = summary(model, (1,56,448,448))
+    for param_name, param in model.named_parameters():
+        if param_name.startswith("conv_seg"):
+            param.requires_grad = True
+        else:
+            param.requires_grad = False
+
+    model_stats = summary(model, (1,30,256,256))
+
+    parameters = model.parameters
 
     # optimizer
     params = [
