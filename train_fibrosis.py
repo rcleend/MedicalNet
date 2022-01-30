@@ -95,13 +95,7 @@ if __name__ == '__main__':
     torch.manual_seed(sets.manual_seed)
     model, parameters = generate_model(sets) 
 
-    # for param_name, param in model.named_parameters():
-    #     if param_name.startswith("conv_seg"):
-    #         param.requires_grad = True
-    #     else:
-    #         param.requires_grad = False
-
-    # model_stats = summary(model, (1,30,256,256))
+    model_stats = summary(model, (1,30,256,256))
 
     # optimizer
     params = [
@@ -131,4 +125,4 @@ if __name__ == '__main__':
     data_loader = DataLoader(training_dataset, batch_size=sets.batch_size, shuffle=True, num_workers=sets.num_workers, pin_memory=sets.pin_memory)
 
     # training
-    train(data_loader, model, optimizer, scheduler, total_epochs=sets.n_epochs, save_interval=sets.save_intervals, save_folder=sets.save_folder, sets=sets) 
+    # train(data_loader, model, optimizer, scheduler, total_epochs=sets.n_epochs, save_interval=sets.save_intervals, save_folder=sets.save_folder, sets=sets) 
