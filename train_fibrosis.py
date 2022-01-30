@@ -56,7 +56,7 @@ def train(data_loader, model, optimizer, scheduler, total_epochs, save_interval,
             y_pred = model(x_batch)
 
             # Calculate loss using mean squared error
-            loss = mse(y_pred.to(torch.float32), y_batch.to(torch.float32)) / 10 #batch size
+            loss = mse(y_pred.to(torch.float32), y_batch.to(torch.float32)) / sets.batch_size
             # loss = multi_criterion(y_pred, y_batch)
 
 
