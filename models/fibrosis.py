@@ -60,8 +60,9 @@ class CustomDenseLayer(nn.Module):
       x = self.flatten(x)
       x = self.linear(x)
       #note: we clone the x tensors to prevent modification before computing the gradient
-      x[:,0] = self.relu(x[:,0].clone()) #FVC value
-      x[:,1] = self.relu(x[:,1].clone()) ## Age
-      x[:,2] = self.sigmoid(x[:,2].clone()) ##Male/female
-      x[:,3:6] = self.softmax(x[:,3:6].clone())
+      x = self.relu(x[:,0].clone()) #FVC value
+    #   x[:,0] = self.relu(x[:,0].clone()) #FVC value
+    #   x[:,1] = self.relu(x[:,1].clone()) ## Age
+    #   x[:,2] = self.sigmoid(x[:,2].clone()) ##Male/female
+    #   x[:,3:6] = self.softmax(x[:,3:6].clone())
       return x
