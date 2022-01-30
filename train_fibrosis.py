@@ -59,7 +59,7 @@ def train(data_loader, model, optimizer, scheduler, total_epochs, save_interval,
             # loss = multi_criterion(y_pred, y_batch)
 
 
-            writer.add_scalar("Loss/train", loss, batch_id_sp)
+            writer.add_scalar("Loss/train", loss, batch_id)
 
             loss.backward()                
             optimizer.step()
