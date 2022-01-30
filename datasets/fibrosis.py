@@ -92,6 +92,7 @@ class FibrosisDataset(Dataset):
 
         images = self.__load_images__(self.img_dir + self.entries.iloc[i,0])
         x_img = self.__resize_data__(images)
+        print(x_img.shape)
 
         # Create y values (FVC, Age, Sex, Smoking)
         y_fvc = self.entries.iloc[i,2]
