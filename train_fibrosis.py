@@ -24,8 +24,8 @@ def train(data_loader, model, optimizer, scheduler, total_epochs, save_interval,
     batches_per_epoch = len(data_loader)
     log.info('{} epochs in total, {} batches per epoch'.format(total_epochs, batches_per_epoch))
 
-    # mse = nn.MSELoss()
-    multi_criterion = nn.MultiLabelSoftMarginLoss(weight=None, reduce=False)
+    mse = nn.MSELoss()
+    # multi_criterion = nn.MultiLabelSoftMarginLoss(weight=None, reduce=False)
 
 
     # Enable anomaly detection in backward pass
@@ -56,8 +56,8 @@ def train(data_loader, model, optimizer, scheduler, total_epochs, save_interval,
             
 
             # Calculate loss using mean squared error
-            # loss = mse(y_pred, y_batch)
-            loss = multi_criterion(y_pred, y_batch)
+            loss = mse(y_pred, y_batch)
+            # loss = multi_criterion(y_pred, y_batch)
             loss.backward()                
             optimizer.step()
 
