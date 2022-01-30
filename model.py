@@ -6,7 +6,7 @@ from models.fibrosis import MedicalNet
 
 def generate_model(opt):
     assert opt.model in [
-        'resnet'
+        'resnet',
         'fibrosis'
     ]
 
