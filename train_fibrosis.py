@@ -17,12 +17,14 @@ from utils.logger import log
 from scipy import ndimage
 import os
 from torchsummary import summary
+from torch.utils.tensorboard import SummaryWriter
 
 
 
 def train(data_loader, model, optimizer, scheduler, total_epochs, save_interval, save_folder, sets):
     batches_per_epoch = len(data_loader)
     log.info('{} epochs in total, {} batches per epoch'.format(total_epochs, batches_per_epoch))
+    writer = SummaryWriter()
 
     mse = nn.MSELoss()
     # multi_criterion = nn.MultiLabelSoftMarginLoss(weight=None, reduce=False)
@@ -47,16 +49,17 @@ def train(data_loader, model, optimizer, scheduler, total_epochs, save_interval,
         for batch_id, (x_batch, y_batch) in enumerate(data_loader):
             y_batch = y_batch.to(device)
             batch_id_sp = epoch * batches_per_epoch
+
             optimizer.zero_grad()
 
             y_pred = model(x_batch)
-            print('pred:', y_pred)
-            print('acc:', y_batch)
-            
 
             # Calculate loss using mean squared error
             loss = mse(y_pred.to(torch.float32), y_batch.to(torch.float32)) / 10 #batch size
             # loss = multi_criterion(y_pred, y_batch)
+
+            writer.add_scalar("Loss/train", loss, epoch)
+
             loss.backward()                
             optimizer.step()
 
