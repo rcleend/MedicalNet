@@ -40,7 +40,7 @@ def parse_opts():
         '--phase', default='train', type=str, help='Phase of train or test')
     parser.add_argument(
         '--save_intervals',
-        default=10,
+        default=100,
         type=int,
         help='Interation for saving model')
     parser.add_argument(
