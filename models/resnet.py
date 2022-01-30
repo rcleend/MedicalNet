@@ -192,7 +192,7 @@ class ResNet(nn.Module):
                                         bias=False),
                                         nn.AdaptiveMaxPool3d(output_size=(10, 10, 10)),
                                         CustomDenseLayer(2000)
-                                        )
+                                        ,requires_grad =True)
 
         for m in self.modules():
             if isinstance(m, nn.Conv3d):
