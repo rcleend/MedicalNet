@@ -58,7 +58,7 @@ class CustomDenseLayer(nn.Module):
 
   def forward(self, x):
       x = self.flatten(x)
-      x = self.linear(x)
+    #   x = self.linear(x)
       #note: we clone the x tensors to prevent modification before computing the gradient
       x = self.relu(x[:,0].clone()) #FVC value
       x = self.linear(x)
