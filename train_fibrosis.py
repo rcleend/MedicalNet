@@ -89,7 +89,7 @@ def save_model(save_folder, model, optimizer, epoch, batch_id):
                     
     log.info('Save checkpoints: epoch = {}, batch_id = {}'.format(epoch, batch_id)) 
     torch.save({
-                'ecpoch': epoch,
+                'epoch': epoch,
                 'batch_id': batch_id,
                 'state_dict': model.state_dict(),
                 'optimizer': optimizer.state_dict()},
@@ -116,7 +116,7 @@ if __name__ == '__main__':
             model.load_state_dict(checkpoint['state_dict'])
             optimizer.load_state_dict(checkpoint['optimizer'])
             print("=> loaded checkpoint '{}' (epoch {})"
-              .format(sets.resume_path, checkpoint['epoch']))
+              .format(sets.resume_path, checkpoint['ecpoch']))
 
     sets.phase = 'train'
     if sets.no_cuda:
