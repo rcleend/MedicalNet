@@ -57,10 +57,10 @@ class CustomDenseLayer(nn.Module):
     self.softmax = nn.Softmax()
 
   def forward(self, x):
-      x = self.flatten(x)
+    #   x = self.flatten(x)
     #   x = self.linear(x)
       #note: we clone the x tensors to prevent modification before computing the gradient
-      x = self.relu(x.clone()) #FVC value
+      x = self.relu(x) #FVC value
       x = self.linear(x)
     #   x[:,0] = self.relu(x[:,0].clone()) #FVC value
     #   x[:,1] = self.relu(x[:,1].clone()) ## Age
