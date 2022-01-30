@@ -115,9 +115,8 @@ if __name__ == '__main__':
             checkpoint = torch.load(sets.resume_path)
             model.load_state_dict(checkpoint['state_dict'])
             optimizer.load_state_dict(checkpoint['optimizer'])
-            print('cp: ',checkpoint)
-            # print("=> loaded checkpoint '{}' (epoch {})"
-            #   .format(sets.resume_path, checkpoint['epoch']))
+            print("=> loaded checkpoint '{}' (epoch {})"
+              .format(sets.resume_path, checkpoint['epoch']))
 
     sets.phase = 'train'
     if sets.no_cuda:
