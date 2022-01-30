@@ -38,7 +38,7 @@ class FibrosisDataset(Dataset):
         images = torch.empty((30,256,256))
         for i, filename in enumerate(os.listdir(images_path)):
             img = read_image(f'{images_path}/{filename}', mode=ImageReadMode.UNCHANGED)
-            # print(img.shape)
+            print(img.shape)
             # print(self.__resize_data__(img).shape)
             images[i,:,:] = img
 
