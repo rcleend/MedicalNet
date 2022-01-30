@@ -95,7 +95,7 @@ def parse_opts():
         '--model',
         default='resnet',
         type=str,
-        help='(resnet | preresnet | wideresnet | resnext | densenet | ')
+        help='(resnet | preresnet | wideresnet | resnext | densenet | fibrosis')
     parser.add_argument(
         '--model_depth',
         default=50,

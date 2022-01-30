@@ -9,16 +9,27 @@ from models.resnet import resnet10
 
 class MedicalNet(nn.Module):
 
-  def __init__(self, path_to_weights, device):
+  def __init__(self, opt):
     super(MedicalNet, self).__init__()
-    self.model = resnet10(sample_input_D=30, sample_input_H=256, sample_input_W=256, num_seg_classes=2)
+
+    device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
+
+    self.model = resnet10(
+                            sample_input_D=opt.input_D, 
+                            sample_input_H=opt.input_H, 
+                            sample_input_W=opt.input_W, 
+                            num_seg_classes=opt.n_seg_classes,
+                            shortcut_type=opt.resnet_shortcut,
+                            no_cuda=opt.no_cuda,
+                        )
+
     self.model.conv_seg = nn.Sequential(
         nn.AdaptiveMaxPool3d(output_size=(1, 1, 1)),
         nn.Flatten(start_dim=1),
         nn.Dropout(0.1)
     )
     net_dict = self.model.state_dict()
-    pretrained_weights = torch.load(path_to_weights, map_location=torch.device(device))
+    pretrained_weights = torch.load(opt.pretrain_path, map_location=torch.device(device))
     pretrain_dict = {
         k.replace("module.", ""): v for k, v in pretrained_weights['state_dict'].items() if k.replace("module.", "") in net_dict.keys()
       }

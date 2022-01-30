@@ -1,6 +1,7 @@
 import torch
 from torch import nn
 from models import resnet
+from models.fibrosis import MedicalNet
 
 
 def generate_model(opt):
@@ -67,6 +68,10 @@ def generate_model(opt):
                 shortcut_type=opt.resnet_shortcut,
                 no_cuda=opt.no_cuda,
                 num_seg_classes=opt.n_seg_classes)
+    
+    if opt.model == 'fibrosis':
+        if opt.model_depth == 10:
+            model = MedicalNet(opt) 
     
     if not opt.no_cuda:
         if len(opt.gpu_id) > 1:
