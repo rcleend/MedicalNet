@@ -42,7 +42,6 @@ def train(data_loader, model, optimizer, scheduler, total_epochs, save_interval,
     for epoch in range(total_epochs):
         log.info('Start epoch {}'.format(epoch))
         
-        scheduler.step()
         log.info('lr = {}'.format(scheduler.get_lr()))
 
         for batch_id, (x_batch, y_batch) in enumerate(data_loader):
@@ -69,6 +68,8 @@ def train(data_loader, model, optimizer, scheduler, total_epochs, save_interval,
             # Save model on specific intervals
             if batch_id_sp % save_interval == 0:
                 save_model(save_folder, model, optimizer, epoch, batch_id)
+
+        scheduler.step()
     
     print('Finished training')            
 
