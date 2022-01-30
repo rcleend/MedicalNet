@@ -99,20 +99,20 @@ if __name__ == '__main__':
     torch.manual_seed(sets.manual_seed)
     model, parameters = generate_model(sets) 
 
-    model_stats = summary(model, (1,30,256,256))
+    # model_stats = summary(model, (1,30,256,256))
 
     optimizer = torch.optim.SGD(model.parameters(), lr=sets.learning_rate, momentum=0.9, weight_decay=1e-3)   
     scheduler = optim.lr_scheduler.ExponentialLR(optimizer, gamma=0.99)
     
     # train from resume
-    # if sets.resume_path:
-    #     if os.path.isfile(sets.resume_path):
-    #         print("=> loading checkpoint '{}'".format(sets.resume_path))
-    #         checkpoint = torch.load(sets.resume_path)
-    #         model.load_state_dict(checkpoint['state_dict'])
-    #         optimizer.load_state_dict(checkpoint['optimizer'])
-    #         print("=> loaded checkpoint '{}' (epoch {})"
-    #           .format(sets.resume_path, checkpoint['epoch']))
+    if sets.resume_path:
+        if os.path.isfile(sets.resume_path):
+            print("=> loading checkpoint '{}'".format(sets.resume_path))
+            checkpoint = torch.load(sets.resume_path)
+            model.load_state_dict(checkpoint['state_dict'])
+            optimizer.load_state_dict(checkpoint['optimizer'])
+            print("=> loaded checkpoint '{}' (epoch {})"
+              .format(sets.resume_path, checkpoint['epoch']))
 
     sets.phase = 'train'
     if sets.no_cuda:
