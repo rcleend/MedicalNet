@@ -42,7 +42,7 @@ def train(data_loader, model, optimizer, scheduler, total_epochs, save_interval,
     for epoch in range(total_epochs):
         log.info('Start epoch {}'.format(epoch))
         
-        log.info('lr = {}'.format(scheduler.get_lr()))
+        log.info('lr = {}'.format(scheduler.get_last_lr()))
 
         for batch_id, (x_batch, y_batch) in enumerate(data_loader):
             y_batch = y_batch.to(device)
