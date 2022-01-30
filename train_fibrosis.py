@@ -41,6 +41,7 @@ def train(data_loader, model, optimizer, scheduler, total_epochs, save_interval,
     else:
         device = torch.device('cpu')
 
+    idx = 0
     for epoch in range(total_epochs):
         log.info('Start epoch {}'.format(epoch))
         
@@ -59,7 +60,7 @@ def train(data_loader, model, optimizer, scheduler, total_epochs, save_interval,
             # loss = multi_criterion(y_pred, y_batch)
 
 
-            writer.add_scalar("Loss/train", loss, batch_id)
+            writer.add_scalar("Loss/train", loss, idx)
 
             loss.backward()                
             optimizer.step()
@@ -67,11 +68,13 @@ def train(data_loader, model, optimizer, scheduler, total_epochs, save_interval,
             avg_batch_time = (time.time() - train_time_sp) / (1 + batch_id_sp)
             log.info(
                     'Batch: {}-{} ({}), loss = {:.3f}, avg_batch_time = {:.3f}'\
-                    .format(epoch, batch_id, batch_id_sp, loss.item(), avg_batch_time))
+                    .format(epoch, batch_id, idx, loss.item(), avg_batch_time))
 
             # Save model on specific intervals
-            if batch_id_sp % save_interval == 0:
+            if idx % save_interval == 0:
                 save_model(save_folder, model, optimizer, epoch, batch_id)
+
+            idx += 1
 
         scheduler.step()
     
