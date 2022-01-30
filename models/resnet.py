@@ -191,7 +191,6 @@ class ResNet(nn.Module):
                                         stride=(1, 1, 1),
                                         bias=False),
                                         nn.AdaptiveMaxPool3d(output_size=(10, 10, 10)),
-                                        nn.ReLU(inplace=True),
                                         CustomDenseLayer(2000)
                                         )
 
