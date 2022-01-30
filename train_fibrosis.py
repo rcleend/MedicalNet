@@ -51,6 +51,9 @@ def train(data_loader, model, optimizer, scheduler, total_epochs, save_interval,
             optimizer.zero_grad()
 
             y_pred = model(x_batch)
+            print('pred:', y_pred)
+            print('acc:', y_batch)
+            
 
             # Calculate loss using mean squared error
             # loss = mse(y_pred, y_batch)
