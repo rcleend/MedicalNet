@@ -92,11 +92,11 @@ if __name__ == '__main__':
     torch.manual_seed(sets.manual_seed)
     model, parameters = generate_model(sets) 
 
-    for param_name, param in model.named_parameters():
-        if param_name.startswith("conv_seg"):
-            param.requires_grad = True
-        else:
-            param.requires_grad = False
+    # for param_name, param in model.named_parameters():
+    #     if param_name.startswith("conv_seg"):
+    #         param.requires_grad = True
+    #     else:
+    #         param.requires_grad = False
 
     model_stats = summary(model, (1,30,256,256))
 
