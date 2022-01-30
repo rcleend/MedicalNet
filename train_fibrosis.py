@@ -92,7 +92,7 @@ if __name__ == '__main__':
     torch.manual_seed(sets.manual_seed)
     model, parameters = generate_model(sets) 
 
-    model_stats = summary(model, (1,56,448,448))
+    # model_stats = summary(model, (1,56,448,448))
 
     # optimizer
     params = [

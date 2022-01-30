@@ -39,7 +39,10 @@ class FibrosisDataset(Dataset):
 
     def __load_images__(self, images_path):
         for i, filename in enumerate(os.listdir(images_path)):
-            self.patient[:,:,i] = read_image(f'{images_path}/{filename}', mode=ImageReadMode.UNCHANGED)
+            img = read_image(f'{images_path}/{filename}', mode=ImageReadMode.UNCHANGED)
+            print(img.shape)
+            print(self.__resize_data__(img).shape)
+            self.patient[:,:,i] = img
 
     def __resize_data__(self, data):
         """
