@@ -98,7 +98,7 @@ if __name__ == '__main__':
         else:
             param.requires_grad = False
 
-    model_stats = summary(model, (1,56,448,448))
+    model_stats = summary(model, (1,30,256,256))
 
     # optimizer
     params = [
