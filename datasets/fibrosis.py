@@ -101,4 +101,4 @@ class FibrosisDataset(Dataset):
         # y = np.array([y_fvc, y_age, y_is_male, y_smk, y_ex_smk, y_non_smk])
         y = y_fvc
 
-        return x_img, y
+        return x_img, np.array([y])

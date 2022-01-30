@@ -5,7 +5,6 @@ from torch.autograd import Variable
 import math
 from functools import partial
 from models.resnet import resnet10
-import numpy as np
 
 
 class MedicalNet(nn.Module):
@@ -67,4 +66,4 @@ class CustomDenseLayer(nn.Module):
     #   x[:,1] = self.relu(x[:,1].clone()) ## Age
     #   x[:,2] = self.sigmoid(x[:,2].clone()) ##Male/female
     #   x[:,3:6] = self.softmax(x[:,3:6].clone())
-      return np.array([x])
+      return x
