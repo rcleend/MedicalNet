@@ -37,10 +37,7 @@ class FibrosisDataset(Dataset):
     def __load_images__(self, images_path):
         images = torch.empty((30,256,256))
         for i, filename in enumerate(os.listdir(images_path)):
-            img = read_image(f'{images_path}/{filename}', mode=ImageReadMode.UNCHANGED)
-            print(img.shape)
-            # print(self.__resize_data__(img).shape)
-            images[i,:,:] = img
+            images[i,:,:] = read_image(f'{images_path}/{filename}', mode=ImageReadMode.UNCHANGED)
 
         return images
 
@@ -91,8 +88,7 @@ class FibrosisDataset(Dataset):
         # x = [x_wks, x_pct, x_img]
 
         images = self.__load_images__(self.img_dir + self.entries.iloc[i,0])
-        x_img = self.__resize_data__(images)
-        print(x_img.shape)
+        x_img = self.__ct2tensorarray__(self.__resize_data__(images))
 
         # Create y values (FVC, Age, Sex, Smoking)
         y_fvc = self.entries.iloc[i,2]
