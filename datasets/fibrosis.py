@@ -31,18 +31,18 @@ class FibrosisDataset(Dataset):
         self.input_W = sets.input_W
         self.phase = sets.phase
 
-
-        self.patient = torch.empty((256,256,30))
-
     def __len__(self):
         return len(self.entries)
 
     def __load_images__(self, images_path):
+        images = torch.empty((256,256,30))
         for i, filename in enumerate(os.listdir(images_path)):
             img = read_image(f'{images_path}/{filename}', mode=ImageReadMode.UNCHANGED)
-            print(img.shape)
-            print(self.__resize_data__(img).shape)
-            self.patient[:,:,i] = img
+            # print(img.shape)
+            # print(self.__resize_data__(img).shape)
+            images[:,:,i] = img
+
+        return images
 
     def __resize_data__(self, data):
         """
@@ -90,7 +90,8 @@ class FibrosisDataset(Dataset):
 
         # x = [x_wks, x_pct, x_img]
 
-        self.__load_images__(self.img_dir + self.entries.iloc[i,0])
+        images = self.__load_images__(self.img_dir + self.entries.iloc[i,0])
+        x_img = self.__resize_data__(images)
 
         # Create y values (FVC, Age, Sex, Smoking)
         y_fvc = self.entries.iloc[i,2]
@@ -102,4 +103,4 @@ class FibrosisDataset(Dataset):
 
         y = np.array([y_fvc, y_age, y_is_male, y_smk, y_ex_smk, y_non_smk])
 
-        return self.patient, y
+        return x_img, y
