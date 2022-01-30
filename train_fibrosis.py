@@ -58,7 +58,8 @@ def train(data_loader, model, optimizer, scheduler, total_epochs, save_interval,
             loss = mse(y_pred.to(torch.float32), y_batch.to(torch.float32)) / 10 #batch size
             # loss = multi_criterion(y_pred, y_batch)
 
-            writer.add_scalar("Loss/train", loss, epoch)
+
+            writer.add_scalar("Loss/train", loss, batch_id_sp)
 
             loss.backward()                
             optimizer.step()
