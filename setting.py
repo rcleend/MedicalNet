@@ -64,7 +64,7 @@ def parse_opts():
         type=int,
         help='Input size of width')
     parser.add_argument(
-        '--me_path',
+        '--resume_path',
         default='',
         type=str,
         help=
