@@ -75,18 +75,6 @@ class FibrosisDataset(Dataset):
 
 
     def __getitem__(self, i):
-        # Create x values (Weeks, Percent, Images)
-        # x_wks = self.entries.iloc[i,1]
-        # x_pct = self.entries.iloc[i,3]
-        # TODO: evaluate if image actually contains relevant information and is not distorted
-        # x_img = self.__ct2tensorarray__(
-        #             self.__resize_data__(
-        #                 self.__load_images__(self.img_dir + self.entries.iloc[i,0])
-        #             )
-        #         )
-
-        # x = [x_wks, x_pct, x_img]
-
         images = self.__load_images__(self.img_dir + self.entries.iloc[i,0])
         x_img = self.__ct2tensorarray__(self.__resize_data__(images))
 
@@ -98,7 +86,6 @@ class FibrosisDataset(Dataset):
         # Get smoking values
         y_smk, y_ex_smk, y_non_smk = self.__get_smoking_values(i)
 
-        # y = np.array([y_fvc, y_age, y_is_male, y_smk, y_ex_smk, y_non_smk])
-        y = y_fvc
+        y = np.array([y_fvc, y_age, y_is_male, y_smk, y_ex_smk, y_non_smk])
 
-        return x_img, np.array([y])
+        return x_img, np.array(y)

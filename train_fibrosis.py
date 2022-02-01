@@ -5,6 +5,7 @@ Written by Whalechen
 
 from setting import parse_opts 
 from datasets.fibrosis import FibrosisDataset 
+from models.fibrosis import CustomLoss
 from model import generate_model
 import torch
 import numpy as np
@@ -26,7 +27,7 @@ def train(data_loader, model, optimizer, scheduler, total_epochs, save_interval,
     log.info('{} epochs in total, {} batches per epoch'.format(total_epochs, batches_per_epoch))
     writer = SummaryWriter()
 
-    mse = nn.MSELoss()
+    custom_loss = CustomLoss()
     # multi_criterion = nn.MultiLabelSoftMarginLoss(weight=None, reduce=False)
 
 
@@ -56,9 +57,7 @@ def train(data_loader, model, optimizer, scheduler, total_epochs, save_interval,
             y_pred = model(x_batch)
 
             # Calculate loss using mean squared error
-            loss = mse(y_pred.to(torch.float32), y_batch.to(torch.float32)) / sets.batch_size
-            # loss = multi_criterion(y_pred, y_batch)
-
+            loss = custom_loss(y_pred.to(torch.float32), y_batch.to(torch.float32)) / sets.batch_size
 
             writer.add_scalar("Loss/train", loss, idx)
 

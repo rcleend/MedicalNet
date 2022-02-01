@@ -41,29 +41,41 @@ class MedicalNet(nn.Module):
     features = self.model(x)
     return self.fc(features)
 
+class CustomLoss(nn.Module):
+    def __init__(self):
+        super().__init__()
+        self.mse = nn.MSELoss()
+        self.bce = nn.BCELoss()
+        
+    def fvc_loss(self, input, target):
+       return torch.sqrt(self.mse(torch.log(input + 1), torch.log(target + 1)))
+
+    def forward(self, input, target):
+        return self.fvc_loss(input[:,0],target[:,0]) + self.mse(input[:,1],target[:,1]) + self.bce(input[:,2:6],target[:,2:6])
 
 class CustomDenseLayer(nn.Module):
   """
   This custom layer implements our custom network architecture. This dense layer is applied after the resnet model
   
   """
-  def __init__(self, input=100):
+  def __init__(self, input=100,n_hidden=10):
     super().__init__()
+    self.n_hidden=n_hidden
     self.input = input
     self.relu = nn.ReLU(inplace=False)
     self.sigmoid = nn.Sigmoid()
     self.flatten = nn.Flatten()
-    self.linear = nn.Linear(input,1)
+    self.linear = nn.Linear(input,self.n_hidden)
+    self.linear2 = nn.Linear(self.n_hidden,6)
     self.softmax = nn.Softmax()
 
   def forward(self, x):
-    #   x = self.flatten(x)
-    #   x = self.linear(x)
-      #note: we clone the x tensors to prevent modification before computing the gradient
-      x = self.relu(x) #FVC value
+      x = self.flatten(x)
       x = self.linear(x)
-    #   x[:,0] = self.relu(x[:,0].clone()) #FVC value
-    #   x[:,1] = self.relu(x[:,1].clone()) ## Age
-    #   x[:,2] = self.sigmoid(x[:,2].clone()) ##Male/female
-    #   x[:,3:6] = self.softmax(x[:,3:6].clone())
+      x = self.linear2(x)
+      #note: we clone the x tensors to prevent modification before computing the gradient
+      # x[:,0] = self.relu(x[:,0].clone()) #FVC value
+      # x[:,1] = self.relu(x[:,1].clone()) ## Age
+      x[:,2] = self.sigmoid(x[:,2].clone()) ##Male/female
+      x[:,3:6] = self.softmax(x[:,3:6].clone())
       return x
