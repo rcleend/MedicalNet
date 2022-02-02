@@ -22,7 +22,7 @@ from torch.utils.tensorboard import SummaryWriter
 
 
 
-def train(data_loader, model, optimizer, scheduler, total_epochs, save_interval, save_folder, sets):
+def train(data_loader, test_loader, model, optimizer, scheduler, total_epochs, save_interval, save_folder, sets):
     batches_per_epoch = len(data_loader)
     log.info('{} epochs in total, {} batches per epoch'.format(total_epochs, batches_per_epoch))
     writer = SummaryWriter()
@@ -34,7 +34,6 @@ def train(data_loader, model, optimizer, scheduler, total_epochs, save_interval,
     # Enable anomaly detection in backward pass
     torch.autograd.set_detect_anomaly(True)
 
-    model.train()
     train_time_sp = time.time()
 
     if torch.cuda.is_available():
@@ -42,12 +41,14 @@ def train(data_loader, model, optimizer, scheduler, total_epochs, save_interval,
     else:
         device = torch.device('cpu')
 
-    idx = 0
+    train_idx = 0
+    test_idx = 0
     for epoch in range(total_epochs):
         log.info('Start epoch {}'.format(epoch))
         
         log.info('lr = {}'.format(scheduler.get_last_lr()))
 
+        model.train()
         for batch_id, (x_batch, y_batch) in enumerate(data_loader):
             y_batch = y_batch.to(device)
             batch_id_sp = epoch * batches_per_epoch
@@ -59,7 +60,7 @@ def train(data_loader, model, optimizer, scheduler, total_epochs, save_interval,
             # Calculate loss using mean squared error
             loss = custom_loss(y_pred.to(torch.float32), y_batch.to(torch.float32)) / sets.batch_size
 
-            writer.add_scalar("Loss/train", loss, idx)
+            writer.add_scalar("Loss/train", loss, train_idx)
 
             loss.backward()                
             optimizer.step()
@@ -67,13 +68,27 @@ def train(data_loader, model, optimizer, scheduler, total_epochs, save_interval,
             avg_batch_time = (time.time() - train_time_sp) / (1 + batch_id_sp)
             log.info(
                     'Batch: {}-{} ({}), loss = {:.3f}, avg_batch_time = {:.3f}'\
-                    .format(epoch, batch_id, idx, loss.item(), avg_batch_time))
+                    .format(epoch, batch_id, train_idx, loss.item(), avg_batch_time))
 
             # Save model on specific intervals
-            if idx % save_interval == 0:
+            if train_idx % save_interval == 0:
                 save_model(save_folder, model, optimizer, epoch, batch_id)
+                
+            train_idx += 1
 
-            idx += 1
+        model.eval()
+        for batch_id, (x_batch, y_batch) in enumerate(test_loader):
+            
+            y_batch = y_batch.to(device)
+
+            y_pred = model(x_batch)
+
+            # Calculate loss using mean squared error
+            loss = custom_loss(y_pred.to(torch.float32), y_batch.to(torch.float32)) / sets.batch_size
+
+            writer.add_scalar("Loss/test", loss, test_idx)
+
+            train_idx += 1
 
         scheduler.step()
     
@@ -126,5 +141,8 @@ if __name__ == '__main__':
     training_dataset = FibrosisDataset(sets.data_root, sets.img_list, sets)
     data_loader = DataLoader(training_dataset, batch_size=sets.batch_size, shuffle=True, num_workers=sets.num_workers, pin_memory=sets.pin_memory)
 
+    test_dataset = FibrosisDataset(sets.data_root, 'test.csv', sets)
+    test_loader = DataLoader(test_dataset, batch_size=sets.batch_size, shuffle=True, num_workers=sets.num_workers, pin_memory=sets.pin_memory)
+
     # training
-    train(data_loader, model, optimizer, scheduler, total_epochs=sets.n_epochs, save_interval=sets.save_intervals, save_folder=sets.save_folder, sets=sets) 
+    train(data_loader, test_loader, model, optimizer, scheduler, total_epochs=sets.n_epochs, save_interval=sets.save_intervals, save_folder=sets.save_folder, sets=sets) 
