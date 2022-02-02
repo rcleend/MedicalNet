@@ -41,8 +41,7 @@ def train(data_loader, test_loader, model, optimizer, scheduler, total_epochs, s
     else:
         device = torch.device('cpu')
 
-    train_idx = 0
-    test_idx = 0
+    idx = 0
     for epoch in range(total_epochs):
         log.info('Start epoch {}'.format(epoch))
         
@@ -60,7 +59,7 @@ def train(data_loader, test_loader, model, optimizer, scheduler, total_epochs, s
             # Calculate loss using mean squared error
             loss = custom_loss(y_pred.to(torch.float32), y_batch.to(torch.float32)) / sets.batch_size
 
-            writer.add_scalar("Loss/train", loss, train_idx)
+            writer.add_scalar("Loss/train", loss, idx)
 
             loss.backward()                
             optimizer.step()
@@ -68,15 +67,16 @@ def train(data_loader, test_loader, model, optimizer, scheduler, total_epochs, s
             avg_batch_time = (time.time() - train_time_sp) / (1 + batch_id_sp)
             log.info(
                     'Batch: {}-{} ({}), loss = {:.3f}, avg_batch_time = {:.3f}'\
-                    .format(epoch, batch_id, train_idx, loss.item(), avg_batch_time))
+                    .format(epoch, batch_id, idx, loss.item(), avg_batch_time))
 
             # Save model on specific intervals
-            if train_idx % save_interval == 0:
+            if idx % save_interval == 0:
                 save_model(save_folder, model, optimizer, epoch, batch_id)
-                
-            train_idx += 1
+
+            idx += 1
 
         model.eval()
+        total_loss_test = 0
         for batch_id, (x_batch, y_batch) in enumerate(test_loader):
             
             y_batch = y_batch.to(device)
@@ -84,11 +84,10 @@ def train(data_loader, test_loader, model, optimizer, scheduler, total_epochs, s
             y_pred = model(x_batch)
 
             # Calculate loss using mean squared error
-            loss = custom_loss(y_pred.to(torch.float32), y_batch.to(torch.float32)) / sets.batch_size
+            total_loss_test += custom_loss(y_pred.to(torch.float32), y_batch.to(torch.float32)) / sets.batch_size
 
-            writer.add_scalar("Loss/test", loss, test_idx)
 
-            train_idx += 1
+        writer.add_scalar("Loss/test", total_loss_test / batches_per_epoch, idx)
 
         scheduler.step()
     
