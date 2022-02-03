@@ -41,7 +41,7 @@ class MedicalNet(nn.Module):
     img, wks = x
     img_features = self.model(img)
     x = torch.cat((torch.unsqueeze(wks,1),img_features),1)
-    x.size()
+    print(x.size())
     return self.fc(x)
 
 class CustomLoss(nn.Module):
