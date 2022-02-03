@@ -93,4 +93,4 @@ class FibrosisDataset(Dataset):
         y = np.array([y_fvc, y_age, y_is_male, y_smk, y_ex_smk, y_non_smk])
 
         # Return Patiente ID since it is needed as input for the evaluation file
-        return x_img, y, patient_id
+        return x, y, patient_id

@@ -39,7 +39,8 @@ class MedicalNet(nn.Module):
 
   def forward(self, x):
     img_features = self.model(x[0])
-    return self.fc([img_features, x])
+    x = torch.cat((torch.unsqueeze(x[1],1),img_features),1)
+    return self.fc(x)
 
 class CustomLoss(nn.Module):
     def __init__(self):
@@ -70,8 +71,10 @@ class CustomDenseLayer(nn.Module):
     self.softmax = nn.Softmax()
 
   def forward(self, x):
+
       x = self.flatten(x)
       x = self.linear(x)
+      x = self.relu(x)
       x = self.linear2(x)
       #note: we clone the x tensors to prevent modification before computing the gradient
       x[:,2] = self.sigmoid(x[:,2].clone()) # Male/female
