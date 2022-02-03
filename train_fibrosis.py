@@ -78,11 +78,13 @@ def train(data_loader, test_loader, model, optimizer, scheduler, total_epochs, s
 
             model.eval()
             total_loss_test = 0
-            for batch_id, (x_batch, y_batch) in enumerate(test_loader):
+            for batch_id, (x_img_batch, x_wks_batch, y_batch) in enumerate(test_loader):
             
                 y_batch = y_batch.to(device)
+                x_img_batch = x_img_batch.to(device)
+                x_wks_batch = x_wks_batch.to(device)
 
-                y_pred = model(x_batch)
+                y_pred = model((x_img_batch, x_wks_batch))
 
                 # Calculate loss using mean squared error
                 total_loss_test += custom_loss(y_pred.to(torch.float32), y_batch.to(torch.float32))
