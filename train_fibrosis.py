@@ -58,6 +58,7 @@ def train(data_loader, test_loader, model, optimizer, scheduler, total_epochs, s
             optimizer.zero_grad()
 
             y_pred = model((x_img_batch, x_wks_batch))
+            print(y_pred)
 
             # Calculate loss using mean squared error
             loss = custom_loss(y_pred.to(torch.float32), y_batch.to(torch.float32)) / sets.batch_size
