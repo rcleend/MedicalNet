@@ -75,8 +75,12 @@ class FibrosisDataset(Dataset):
 
 
     def __getitem__(self, i):
+        patient_id = self.entries.iloc[i,0]
         images = self.__load_images__(self.img_dir + self.entries.iloc[i,0])
         x_img = self.__ct2tensorarray__(self.__resize_data__(images))
+        x_wks = self.entries.iloc[i, 1]
+
+        x = np.array([x_img, x_wks])
 
         # Create y values (FVC, Age, Sex, Smoking)
         y_fvc = self.entries.iloc[i,2]
@@ -88,4 +92,5 @@ class FibrosisDataset(Dataset):
 
         y = np.array([y_fvc, y_age, y_is_male, y_smk, y_ex_smk, y_non_smk])
 
-        return x_img, np.array(y)
+        # Return Patiente ID since it is needed as input for the evaluation file
+        return x_img, y, patient_id

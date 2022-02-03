@@ -47,7 +47,7 @@ def train(data_loader, test_loader, model, optimizer, scheduler, total_epochs, s
         
         log.info('lr = {}'.format(scheduler.get_last_lr()))
 
-        for batch_id, (x_batch, y_batch) in enumerate(data_loader):
+        for batch_id, (x_batch, y_batch, _) in enumerate(data_loader):
             model.train()
 
             y_batch = y_batch.to(device)
@@ -95,6 +95,12 @@ def train(data_loader, test_loader, model, optimizer, scheduler, total_epochs, s
         scheduler.step()
     
     print('Finished training')            
+
+def get_confidence():
+    # Store new prediction in prediction history csv for each unique datapoint
+    if not os.path.isfile('confidence.csv'):
+        print('no csv')
+    # Get standard deviation based on the last x amount of predictions
 
 
 def save_model(save_folder, model, optimizer, epoch, batch_id):

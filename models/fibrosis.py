@@ -38,8 +38,8 @@ class MedicalNet(nn.Module):
     self.fc = CustomDenseLayer(512)
 
   def forward(self, x):
-    features = self.model(x)
-    return self.fc(features)
+    img_features = self.model(x[0])
+    return self.fc([img_features, x])
 
 class CustomLoss(nn.Module):
     def __init__(self):
@@ -74,8 +74,6 @@ class CustomDenseLayer(nn.Module):
       x = self.linear(x)
       x = self.linear2(x)
       #note: we clone the x tensors to prevent modification before computing the gradient
-      # x[:,0] = self.relu(x[:,0].clone()) #FVC value
-      # x[:,1] = self.relu(x[:,1].clone()) ## Age
-      x[:,2] = self.sigmoid(x[:,2].clone()) ##Male/female
-      x[:,3:6] = self.softmax(x[:,3:6].clone())
+      x[:,2] = self.sigmoid(x[:,2].clone()) # Male/female
+      x[:,3:6] = self.softmax(x[:,3:6].clone()) # Smoking Status
       return x
