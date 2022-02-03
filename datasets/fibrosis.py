@@ -78,7 +78,7 @@ class FibrosisDataset(Dataset):
         patient_id = self.entries.iloc[i,0]
         images = self.__load_images__(self.img_dir + self.entries.iloc[i,0])
         x_img = self.__ct2tensorarray__(self.__resize_data__(images))
-        x_wks = self.entries.iloc[i, 1]
+        x_wks = torch.tensor(self.entries.iloc[i, 1])
 
         x = np.array([x_img, x_wks])
 
@@ -90,8 +90,7 @@ class FibrosisDataset(Dataset):
         # Get smoking values
         y_smk, y_ex_smk, y_non_smk = self.__get_smoking_values(i)
 
-        y = np.array([y_fvc, y_age, y_is_male, y_smk, y_ex_smk, y_non_smk])
+        y = torch.tensor([y_fvc, y_age, y_is_male, y_smk, y_ex_smk, y_non_smk])
 
         # Return Patiente ID since it is needed as input for the evaluation file
-        return np.array(x), np.array(y) #, patient_id
-        
+        return x_img, x_wks, y #, patient_id
