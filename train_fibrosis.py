@@ -76,21 +76,21 @@ def train(data_loader, test_loader, model, optimizer, scheduler, total_epochs, s
             if idx % save_interval == 0:
                 save_model(save_folder, model, optimizer, epoch, batch_id)
 
-            model.eval()
-            total_loss_test = 0
-            for batch_id, (x_img_batch, x_wks_batch, y_batch) in enumerate(test_loader):
+            # model.eval()
+            # total_loss_test = 0
+            # for batch_id, (x_img_batch, x_wks_batch, y_batch) in enumerate(test_loader):
             
-                y_batch = y_batch.to(device)
-                x_img_batch = x_img_batch.to(device)
-                x_wks_batch = x_wks_batch.to(device)
+            #     y_batch = y_batch.to(device)
+            #     x_img_batch = x_img_batch.to(device)
+            #     x_wks_batch = x_wks_batch.to(device)
 
-                y_pred = model((x_img_batch, x_wks_batch))
+            #     y_pred = model((x_img_batch, x_wks_batch))
 
-                # Calculate loss using mean squared error
-                total_loss_test += custom_loss(y_pred.to(torch.float32), y_batch.to(torch.float32))
+            #     # Calculate loss using mean squared error
+            #     total_loss_test += custom_loss(y_pred.to(torch.float32), y_batch.to(torch.float32))
 
 
-            writer.add_scalar("Loss/test", total_loss_test / batches_per_epoch, idx)
+            # writer.add_scalar("Loss/test", total_loss_test / batches_per_epoch, idx)
 
 
             idx += 1
