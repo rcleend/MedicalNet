@@ -126,7 +126,7 @@ if __name__ == '__main__':
 
     # model_stats = summary(model, (1,30,256,256))
 
-    optimizer = torch.optim.SGD(model.parameters(), lr=sets.learning_rate, momentum=0.9, weight_decay=1e-3)   
+    optimizer = torch.optim.Adam(model.parameters(), lr=sets.learning_rate, weight_decay=1e-3)   
     scheduler = optim.lr_scheduler.ExponentialLR(optimizer, gamma=0.99)
     
     # train from resume
