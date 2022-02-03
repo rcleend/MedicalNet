@@ -47,15 +47,17 @@ def train(data_loader, test_loader, model, optimizer, scheduler, total_epochs, s
         
         log.info('lr = {}'.format(scheduler.get_last_lr()))
 
-        for batch_id, (x_batch, y_batch) in enumerate(data_loader):
+        for batch_id, (x_img_batch, x_wks_batch, y_batch) in enumerate(data_loader):
             model.train()
 
             y_batch = y_batch.to(device)
+            x_img_batch = x_img_batch.to(device)
+            x_wks_batch = x_wks_batch.to(device)
             batch_id_sp = epoch * batches_per_epoch
 
             optimizer.zero_grad()
 
-            y_pred = model(x_batch)
+            y_pred = model((x_img_batch, x_wks_batch))
 
             # Calculate loss using mean squared error
             loss = custom_loss(y_pred.to(torch.float32), y_batch.to(torch.float32)) / sets.batch_size
