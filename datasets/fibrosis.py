@@ -78,7 +78,7 @@ class FibrosisDataset(Dataset):
         patient_id = self.entries.iloc[i,0]
         images = self.__load_images__(self.img_dir + self.entries.iloc[i,0])
         x_img = self.__ct2tensorarray__(self.__resize_data__(images))
-        x_wks = torch.tensor(self.entries.iloc[i, 7])
+        x_wks = torch.tensor(float(self.entries.iloc[i, 7]), dtype=torch.float32)
 
         # Create y values (FVC, Age, Sex, Smoking)
         y_fvc = self.entries.iloc[i,2]
