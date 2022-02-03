@@ -100,13 +100,6 @@ def train(data_loader, test_loader, model, optimizer, scheduler, total_epochs, s
     
     print('Finished training')            
 
-def get_confidence():
-    # Store new prediction in prediction history csv for each unique datapoint
-    if not os.path.isfile('confidence.csv'):
-        print('no csv')
-    # Get standard deviation based on the last x amount of predictions
-
-
 def save_model(save_folder, model, optimizer, epoch, batch_id):
     model_save_path = '{}_epoch_{}_batch_{}.pth.tar'.format(save_folder, epoch, batch_id)
     model_save_dir = os.path.dirname(model_save_path)
@@ -153,8 +146,9 @@ if __name__ == '__main__':
     training_dataset = FibrosisDataset(sets.data_root, sets.img_list, sets)
     data_loader = DataLoader(training_dataset, batch_size=sets.batch_size, shuffle=True, num_workers=sets.num_workers, pin_memory=sets.pin_memory)
 
-    test_dataset = FibrosisDataset(sets.data_root, 'test.csv', sets)
-    test_loader = DataLoader(test_dataset, batch_size=sets.batch_size, shuffle=True, num_workers=sets.num_workers, pin_memory=sets.pin_memory)
+    # test_dataset = FibrosisDataset(sets.data_root, 'test.csv', sets)
+    # test_loader = DataLoader(test_dataset, batch_size=sets.batch_size, shuffle=True, num_workers=sets.num_workers, pin_memory=sets.pin_memory)
+    test_loader = 0
 
     # training
     train(data_loader, test_loader, model, optimizer, scheduler, total_epochs=sets.n_epochs, save_interval=sets.save_intervals, save_folder=sets.save_folder, sets=sets) 
