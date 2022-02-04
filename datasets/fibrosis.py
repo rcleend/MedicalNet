@@ -89,4 +89,4 @@ class FibrosisDataset(Dataset):
 
         y = torch.tensor([y_fvc, y_age, y_is_male, y_smk, y_ex_smk, y_non_smk], dtype=torch.float32)
 
-        return x_img, y
+        return x_img, torch.tensor(y_fvc)
