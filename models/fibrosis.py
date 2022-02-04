@@ -35,13 +35,11 @@ class MedicalNet(nn.Module):
       }
     net_dict.update(pretrain_dict)
     self.model.load_state_dict(net_dict)
-    self.fc = CustomDenseLayer(513)
+    self.fc = CustomDenseLayer(512)
 
   def forward(self, x):
-    img, wks = x
-    img_features = self.model(img)
-    x = torch.cat((torch.unsqueeze(wks,1),img_features),1)
-    print(x.size())
+    x = self.model(x)
+    # x = torch.cat((torch.unsqueeze(wks,1),img_features),1)
     return self.fc(x)
 
 class CustomLoss(nn.Module):

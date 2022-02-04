@@ -47,7 +47,7 @@ def train(data_loader, test_loader, model, optimizer, scheduler, total_epochs, s
         
         log.info('lr = {}'.format(scheduler.get_last_lr()))
 
-        for batch_id, (x_img_batch, x_wks_batch, y_batch) in enumerate(data_loader):
+        for batch_id, (x_batch, y_batch) in enumerate(data_loader):
             model.train()
 
             y_batch = y_batch.to(device)
@@ -57,7 +57,7 @@ def train(data_loader, test_loader, model, optimizer, scheduler, total_epochs, s
 
             optimizer.zero_grad()
 
-            y_pred = model((x_img_batch, x_wks_batch))
+            y_pred = model(x_batch)
             print(y_pred)
 
             # Calculate loss using mean squared error
@@ -78,21 +78,21 @@ def train(data_loader, test_loader, model, optimizer, scheduler, total_epochs, s
             if idx % save_interval == 0:
                 save_model(save_folder, model, optimizer, epoch, batch_id)
 
-            # model.eval()
-            # total_loss_test = 0
-            # for batch_id, (x_img_batch, x_wks_batch, y_batch) in enumerate(test_loader):
+            model.eval()
+            total_loss_test = 0
+            for batch_id, (x_img_batch, x_wks_batch, y_batch) in enumerate(test_loader):
             
-            #     y_batch = y_batch.to(device)
-            #     x_img_batch = x_img_batch.to(device)
-            #     x_wks_batch = x_wks_batch.to(device)
+                y_batch = y_batch.to(device)
+                x_img_batch = x_img_batch.to(device)
+                x_wks_batch = x_wks_batch.to(device)
 
-            #     y_pred = model((x_img_batch, x_wks_batch))
+                y_pred = model((x_img_batch, x_wks_batch))
 
-            #     # Calculate loss using mean squared error
-            #     total_loss_test += custom_loss(y_pred.to(torch.float32), y_batch.to(torch.float32))
+                # Calculate loss using mean squared error
+                total_loss_test += custom_loss(y_pred.to(torch.float32), y_batch.to(torch.float32))
 
 
-            # writer.add_scalar("Loss/test", total_loss_test / batches_per_epoch, idx)
+            writer.add_scalar("Loss/test", total_loss_test / batches_per_epoch, idx)
 
 
             idx += 1
@@ -148,9 +148,8 @@ if __name__ == '__main__':
     training_dataset = FibrosisDataset(sets.data_root, sets.img_list, sets)
     data_loader = DataLoader(training_dataset, batch_size=sets.batch_size, shuffle=True, num_workers=sets.num_workers, pin_memory=sets.pin_memory)
 
-    # test_dataset = FibrosisDataset(sets.data_root, 'test.csv', sets)
-    # test_loader = DataLoader(test_dataset, batch_size=sets.batch_size, shuffle=True, num_workers=sets.num_workers, pin_memory=sets.pin_memory)
-    test_loader = 0
+    test_dataset = FibrosisDataset(sets.data_root, 'test_interpolated.csv', sets)
+    test_loader = DataLoader(test_dataset, batch_size=sets.batch_size, shuffle=True, num_workers=sets.num_workers, pin_memory=sets.pin_memory)
 
     # training
     train(data_loader, test_loader, model, optimizer, scheduler, total_epochs=sets.n_epochs, save_interval=sets.save_intervals, save_folder=sets.save_folder, sets=sets) 

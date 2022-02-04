@@ -90,5 +90,4 @@ class FibrosisDataset(Dataset):
 
         y = torch.tensor([y_fvc, y_age, y_is_male, y_smk, y_ex_smk, y_non_smk], dtype=torch.float32)
 
-        # Return Patiente ID since it is needed as input for the evaluation file
-        return x_img, x_wks, y #, patient_id
+        return x_img, y
