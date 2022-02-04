@@ -24,6 +24,7 @@ bce = nn.BCELoss()
 def test(data_loader, model, accuracy, sets):
     for i, (x, y) in enumerate(data_loader):
         y_pred = model(x)
+        update_accuracy(accuracy, y_pred, y)
 
 def update_accuracy(accuracy, y_pred, y):
     loss = nn.BCELoss()
