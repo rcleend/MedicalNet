@@ -27,10 +27,13 @@ def test(data_loader, model, sets):
     else:
         device = torch.device('cpu')
 
+    sum_loss = 0
     for i, (x, y) in enumerate(data_loader):
         x, y = x.to(device), y.to(device)
         y_pred = model(x)
-        update_accuracy(y_pred, y)
+        sum_loss += rmse(y_pred, y).item()
+    
+    print('avg loss: ', sum_loss / len(data_loader.dataset))
 
 def update_accuracy(y_pred, y):
     # get RMSE for FVC
