@@ -34,7 +34,7 @@ def test(data_loader, model, accuracy, sets):
 
 def update_accuracy(accuracy, y_pred, y):
     # get RMSE for FVC
-    fvc_rmse = rmse(torch.log(y_pred[:,0] + 1 ), torch.log(y[:,0] + 1))
+    fvc_rmse = rmse(torch.log(y_pred[:,0] + 1), torch.log(y[:,0] + 1))
     print('fvc act: ',torch.log(y[:,0] + 1))
     print('fvc pred: ',torch.log(y_pred[:,0] + 1))
     print('fvc RMSE: ',fvc_rmse)
