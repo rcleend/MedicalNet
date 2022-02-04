@@ -36,7 +36,7 @@ def update_accuracy(accuracy, y_pred, y):
     # get RMSE for FVC
     fvc_rmse = rmse(y_pred[:,0], y[:,0])
     print('fvc act: ',torch.log(y[:,0] + 1))
-    print('fvc pred: ',torch.og(y_pred[:,0] + 1))
+    print('fvc pred: ',torch.log(y_pred[:,0] + 1))
     print('fvc RMSE: ',fvc_rmse)
     # accuracy['fvc'] += fvc_rmse
     # get RMSE for Age
