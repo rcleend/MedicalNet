@@ -20,6 +20,8 @@ import os
 from torchsummary import summary
 from torch.utils.tensorboard import SummaryWriter
 
+mse = nn.MSELoss()
+bce = nn.BCELoss()
 
 
 def train(data_loader, test_loader, model, optimizer, scheduler, total_epochs, save_interval, save_folder, sets):
@@ -47,6 +49,8 @@ def train(data_loader, test_loader, model, optimizer, scheduler, total_epochs, s
         
         log.info('lr = {}'.format(scheduler.get_last_lr()))
 
+        test_acc = {}
+        train_acc = {}
         for batch_id, (x_batch, y_batch) in enumerate(data_loader):
             model.train()
 
@@ -61,9 +65,12 @@ def train(data_loader, test_loader, model, optimizer, scheduler, total_epochs, s
 
             # Calculate loss using mean squared error
             loss = custom_loss(y_pred.to(torch.float32), y_batch.to(torch.float32)) / sets.batch_size
-            print(custom_loss(y_pred.to(torch.float32), y_batch.to(torch.float32)))
+
+            update_accuracy(train_acc, y_pred, y_batch)
 
             writer.add_scalar("Loss/train", loss, idx)
+            writer.add_scalar("Accuracy_FVC/train", train_acc['fvc']/sets.batch_size, idx)
+            writer.add_scalar("Accuracy_Age/train", train_acc['age']/sets.batch_size, idx)
 
             loss.backward()                
             optimizer.step()
@@ -87,7 +94,6 @@ def train(data_loader, test_loader, model, optimizer, scheduler, total_epochs, s
 
                 y_pred = model(x_batch)
 
-                # Calculate loss using mean squared error
                 total_loss_test += custom_loss(y_pred.to(torch.float32), y_batch.to(torch.float32))
 
 
@@ -100,6 +106,35 @@ def train(data_loader, test_loader, model, optimizer, scheduler, total_epochs, s
         scheduler.step()
     
     print('Finished training')            
+
+def update_accuracy(accuracy, y_pred, y, sets):
+    # get RMSE for FVC
+    fvc_rmse = rmse(torch.log(y_pred[:,0] + 1 ), torch.log(y[:,0] + 1))
+    print('fvc act: ',torch.log(y[:,0] + 1) / sets.batch_size)
+    print('fvc pred: ',torch.log(y_pred[:,0] + 1) / sets.batch_size)
+    print('fvc RMSE: ',fvc_rmse / sets.batch_size)
+
+    accuracy['fvc'] += fvc_rmse / sets.batch_size
+    # get RMSE for Age
+    age_rmse = rmse(y_pred[:,1], y[:,1])
+    print('age act: ',y[:,1] / sets.batch_size)
+    print('age pred: ',y_pred[:,1] / sets.batch_size)
+    print('age RMSE: ',age_rmse / sets.batch_size)
+    accuracy['age'] += age_rmse / sets.batch_size
+
+    # get accuracy for sex
+    # sex_acc = bce(y_pred[:,2],y[:,2])
+    # print('sex: ',sex_acc)
+    # accuracy['sex'].append(
+    # get accuracy for smoking
+    # smok_acc = bce(y_pred[:,3:6],y[:,3:6])
+    # print('smk: ', smok_acc)
+    # accuracy['smoking'].append()
+
+def rmse(pred, target):
+    return torch.sqrt(mse(pred, target))
+
+
 
 def save_model(save_folder, model, optimizer, epoch, batch_id):
     model_save_path = '{}_epoch_{}_batch_{}.pth.tar'.format(save_folder, epoch, batch_id)
