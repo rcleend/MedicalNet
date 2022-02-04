@@ -64,7 +64,7 @@ def train(data_loader, test_loader, model, optimizer, scheduler, total_epochs, s
             # Calculate loss using mean squared error
             loss = custom_loss(y_pred.to(torch.float32), y_batch.to(torch.float32)) / sets.batch_size
 
-            fvc_rmse, age_rmse = get_accuracy(y_pred, y_batch, sets)
+            fvc_rmse = get_accuracy(y_pred, y_batch, sets)
             writer.add_scalar("Accuracy/train_fvc", fvc_rmse, idx)
             # writer.add_scalar("Accuracy/train_age", age_rmse, idx)
 
