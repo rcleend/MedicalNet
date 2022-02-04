@@ -21,7 +21,7 @@ from torch.utils.tensorboard import SummaryWriter
 mse = nn.MSELoss()
 bce = nn.BCELoss()
 
-def test(data_loader, model, accuracy, sets):
+def test(data_loader, model, sets):
     if torch.cuda.is_available():
         device = torch.device('cuda')
     else:
@@ -30,29 +30,14 @@ def test(data_loader, model, accuracy, sets):
     for i, (x, y) in enumerate(data_loader):
         x, y = x.to(device), y.to(device)
         y_pred = model(x)
-        update_accuracy(accuracy, y_pred, y)
+        update_accuracy(y_pred, y)
 
-def update_accuracy(accuracy, y_pred, y):
+def update_accuracy(y_pred, y):
     # get RMSE for FVC
-    fvc_rmse = rmse(torch.log(y_pred[:,0] + 1), torch.log(y[:,0] + 1))
-    print('fvc act: ',torch.log(y[:,0] + 1))
-    print('fvc pred: ',torch.log(y_pred[:,0] + 1))
-    print('fvc RMSE: ',fvc_rmse)
-    # accuracy['fvc'] += fvc_rmse
-    # get RMSE for Age
-    age_rmse = rmse(y_pred[:,1], y[:,1])
-    print('age act: ',y[:,1])
-    print('age pred: ',y_pred[:,1])
-    print('age RMSE: ',age_rmse)
-    # accuracy['age'] += age_rmse
-    # get accuracy for sex
-    sex_acc = bce(y_pred[:,2],y[:,2])
-    print('sex: ',sex_acc)
-    # accuracy['sex'].append(
-    # get accuracy for smoking
-    smok_acc = bce(y_pred[:,3:6],y[:,3:6])
-    print('smk: ', smok_acc)
-    # accuracy['smoking'].append()
+    fvc_rmse = rmse(y_pred, y)
+    print('fvc rsme: ', fvc_rmse)
+    print('fvc act: ', y)
+    print('fvc pred: ', y_pred)
 
 def rmse(pred, target):
     return torch.sqrt(mse(pred, target))
@@ -70,5 +55,4 @@ if __name__ == '__main__':
     test_dataset = FibrosisDataset(sets.data_root, 'test.csv', sets)
     data_loader = DataLoader(test_dataset, batch_size=1, shuffle=False, num_workers=1, pin_memory=False)
 
-    accuracy = {}
-    test(data_loader, model, accuracy, sets=sets) 
+    test(data_loader, model,sets=sets) 
