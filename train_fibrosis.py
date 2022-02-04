@@ -62,7 +62,7 @@ def train(data_loader, test_loader, model, optimizer, scheduler, total_epochs, s
             y_pred = model(x_batch)
 
             # Calculate loss using mean squared error
-            loss = custom_loss(y_pred.to(torch.float32), y_batch.to(torch.float32)) / # sets.batch_size
+            loss = custom_loss(y_pred.to(torch.float32), y_batch.to(torch.float32)) #/  sets.batch_size
 
             fvc_rmse = rmse(y_pred, y_batch)
             print('fvc_rmse: ', fvc_rmse)
