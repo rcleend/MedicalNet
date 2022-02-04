@@ -50,7 +50,7 @@ def train(data_loader, test_loader, model, optimizer, scheduler, total_epochs, s
         log.info('lr = {}'.format(scheduler.get_last_lr()))
 
         test_acc = {}
-        train_acc = {}
+        train_acc = {'fvc': 0, 'age': 0}
         for batch_id, (x_batch, y_batch) in enumerate(data_loader):
             model.train()
 
