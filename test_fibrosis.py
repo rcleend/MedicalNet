@@ -22,7 +22,13 @@ mse = nn.MSELoss()
 bce = nn.BCELoss()
 
 def test(data_loader, model, accuracy, sets):
+    if torch.cuda.is_available():
+        device = torch.device('cuda')
+    else:
+        device = torch.device('cpu')
+
     for i, (x, y) in enumerate(data_loader):
+        x, y = x.to(device), y.to(device)
         y_pred = model(x)
         update_accuracy(accuracy, y_pred, y)
 
