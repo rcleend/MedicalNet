@@ -49,7 +49,7 @@ def train(data_loader, test_loader, model, optimizer, scheduler, total_epochs, s
         
         log.info('lr = {}'.format(scheduler.get_last_lr()))
 
-        test_acc = {}
+        test_acc = {'fvc': 0, 'age': 0}
         train_acc = {'fvc': 0, 'age': 0}
         for batch_id, (x_batch, y_batch) in enumerate(data_loader):
             model.train()
@@ -69,8 +69,6 @@ def train(data_loader, test_loader, model, optimizer, scheduler, total_epochs, s
             update_accuracy(train_acc, y_pred, y_batch, sets)
 
             writer.add_scalar("Loss/train", loss, idx)
-            writer.add_scalar("Accuracy/train_fvc", train_acc['fvc']/sets.batch_size, idx)
-            writer.add_scalar("Accuracy/train_age", train_acc['age']/sets.batch_size, idx)
 
             loss.backward()                
             optimizer.step()
@@ -101,6 +99,10 @@ def train(data_loader, test_loader, model, optimizer, scheduler, total_epochs, s
 
 
             idx += 1
+
+        writer.add_scalar("Accuracy/train_fvc", train_acc['fvc'], idx)
+        writer.add_scalar("Accuracy/train_age", train_acc['age'], idx)
+
 
         
         scheduler.step()
