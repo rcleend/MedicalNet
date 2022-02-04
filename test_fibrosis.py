@@ -34,7 +34,7 @@ def test(data_loader, model, accuracy, sets):
 
 def update_accuracy(accuracy, y_pred, y):
     # get RMSE for FVC
-    fvc_rmse = rmse(y_pred[:,0], y[:,0])
+    fvc_rmse = rmse(torch.log(y_pred[:,0] + 1 ), torch.log(y[:,0] + 1))
     print('fvc act: ',torch.log(y[:,0] + 1))
     print('fvc pred: ',torch.log(y_pred[:,0] + 1))
     print('fvc RMSE: ',fvc_rmse)
@@ -55,7 +55,7 @@ def update_accuracy(accuracy, y_pred, y):
     # accuracy['smoking'].append()
 
 def rmse(pred, target):
-    return torch.sqrt(mse(torch.log(pred + 1), torch.log(target +1)))
+    return torch.sqrt(mse(pred, target +1))
 
         
 if __name__ == '__main__':
