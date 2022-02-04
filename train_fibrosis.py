@@ -112,15 +112,15 @@ def get_accuracy(y_pred, y, sets):
     # get RMSE for FVC
     fvc_rmse = rmse(y_pred[:,0], y[:,0]) / sets.batch_size
     print('fvc rsme: ', fvc_rmse)
-    # print('fvc act: ',torch.log(y[:,0] + 1) / sets.batch_size)
-    # print('fvc pred: ',torch.log(y_pred[:,0] + 1) / sets.batch_size)
+    print('fvc act: ',y[:,0] / sets.batch_size)
+    print('fvc pred: ',y_pred[:,0] / sets.batch_size)
     # print('fvc RMSE: ',fvc_rmse / sets.batch_size)
 
     # get RMSE for Age
     age_rmse = rmse(y_pred[:,1], y[:,1]) / sets.batch_size
     print('age rsme: ', age_rmse)
-    # print('age act: ',y[:,1] / sets.batch_size)
-    # print('age pred: ',y_pred[:,1] / sets.batch_size)
+    print('age act: ',y[:,1] / sets.batch_size)
+    print('age pred: ',y_pred[:,1] / sets.batch_size)
     # print('age RMSE: ',age_rmse / sets.batch_size)
 
     # get accuracy for sex
