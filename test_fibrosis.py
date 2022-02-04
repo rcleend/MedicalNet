@@ -52,7 +52,7 @@ if __name__ == '__main__':
     checkpoint = torch.load(sets.resume_path)
     model.load_state_dict(checkpoint['state_dict'])
 
-    test_dataset = FibrosisDataset(sets.data_root, 'test.csv', sets)
+    test_dataset = FibrosisDataset(sets.data_root, sets.img_list, sets)
     data_loader = DataLoader(test_dataset, batch_size=1, shuffle=False, num_workers=1, pin_memory=False)
 
     test(data_loader, model,sets=sets) 
