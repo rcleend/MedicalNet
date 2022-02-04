@@ -66,7 +66,7 @@ def train(data_loader, test_loader, model, optimizer, scheduler, total_epochs, s
 
             fvc_rmse, age_rmse = get_accuracy(y_pred, y_batch, sets)
             writer.add_scalar("Accuracy/train_fvc", fvc_rmse, idx)
-            writer.add_scalar("Accuracy/train_age", age_rmse, idx)
+            # writer.add_scalar("Accuracy/train_age", age_rmse, idx)
 
 
             writer.add_scalar("Loss/train", loss, idx)
@@ -114,6 +114,7 @@ def get_accuracy(y_pred, y, sets):
     print('fvc rsme: ', fvc_rmse)
     print('fvc act: ', torch.mean(y))
     print('fvc pred: ', torch.mean(y_pred))
+    return fvc_rmse
     # print('fvc RMSE: ',fvc_rmse / sets.batch_size)
 
     # get RMSE for Age
@@ -131,7 +132,8 @@ def get_accuracy(y_pred, y, sets):
     # smok_acc = bce(y_pred[:,3:6],y[:,3:6])
     # print('smk: ', smok_acc)
     # accuracy['smoking'].append()
-    return (fvc_rmse, age_rmse)
+    # return (fvc_rmse, age_rmse)
+
 
 def rmse(pred, target):
     return torch.sqrt(mse(pred, target))
