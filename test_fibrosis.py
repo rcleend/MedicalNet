@@ -33,22 +33,25 @@ def test(data_loader, model, accuracy, sets):
         update_accuracy(accuracy, y_pred, y)
 
 def update_accuracy(accuracy, y_pred, y):
-    loss = nn.BCELoss()
     # get RMSE for FVC
     fvc_rmse = rmse(y_pred[:,0], y[:,0])
-    print('fvc: ',fvc_rmse)
+    print('fvc act: ',y[:,0].value)
+    print('fvc pred: ',y_pred[:,0].value)
+    print('fvc RMSE: ',fvc_rmse.value)
     # accuracy['fvc'] += fvc_rmse
     # get RMSE for Age
     age_rmse = rmse(y_pred[:,1], y[:,1])
-    print('age: ',age_rmse)
+    print('age act: ',y[:,1].value)
+    print('age pred: ',y_pred[:,1].value)
+    print('age RMSE: ',age_rmse.value)
     # accuracy['age'] += age_rmse
     # get accuracy for sex
     sex_acc = bce(y_pred[:,2],y[:,2])
-    print('sex: ',sex_acc)
+    print('sex: ',sex_acc.value)
     # accuracy['sex'].append(
     # get accuracy for smoking
     smok_acc = bce(y_pred[:,3:6],y[:,3:6])
-    print('smk: ', smok_acc)
+    print('smk: ', smok_acc.value)
     # accuracy['smoking'].append()
 
 def rmse(pred, target):
