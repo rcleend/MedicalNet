@@ -65,7 +65,8 @@ def train(data_loader, test_loader, model, optimizer, scheduler, total_epochs, s
             loss = custom_loss(y_pred.to(torch.float32), y_batch.to(torch.float32)) #/  sets.batch_size
 
             fvc_rmse = rmse(y_pred, y_batch)
-            print('fvc_rmse: ', fvc_rmse)
+            print('pred: ',torch.mean(y_pred))
+            print('act: ',torch.mean(y_batch))
             writer.add_scalar("Accuracy/train_fvc", fvc_rmse, idx)
             # writer.add_scalar("Accuracy/train_age", age_rmse, idx)
 
