@@ -55,7 +55,7 @@ def update_accuracy(accuracy, y_pred, y):
     # accuracy['smoking'].append()
 
 def rmse(pred, target):
-    return torch.sqrt(mse(torch.log(pred + 1), torch.log(target + 1)))
+    return mse(torch.log(pred + 1), torch.log(target + 1))
 
         
 if __name__ == '__main__':
