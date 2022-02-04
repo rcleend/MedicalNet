@@ -49,7 +49,7 @@ class CustomLoss(nn.Module):
         self.bce = nn.BCELoss()
         
     def fvc_loss(self, input, target):
-       return torch.sqrt(self.mse(torch.log(input + 1), torch.log(target + 1)))
+       return torch.sqrt(self.mse(input,target))
 
     def forward(self, input, target):
         return self.fvc_loss(input[:,0],target[:,0]) * 2 + self.mse(input[:,1],target[:,1]) + self.bce(input[:,2:6],target[:,2:6])
