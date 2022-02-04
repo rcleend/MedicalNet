@@ -110,17 +110,17 @@ def train(data_loader, test_loader, model, optimizer, scheduler, total_epochs, s
 
 def get_accuracy(y_pred, y, sets):
     # get RMSE for FVC
-    fvc_rmse = rmse(y_pred[:,0], y[:,0])
+    fvc_rmse = rmse(y_pred, y)
     print('fvc rsme: ', fvc_rmse)
-    print('fvc act: ', torch.mean(y[:,0]))
-    print('fvc pred: ', torch.mean(y_pred[:,0]))
+    print('fvc act: ', torch.mean(y))
+    print('fvc pred: ', torch.mean(y_pred))
     # print('fvc RMSE: ',fvc_rmse / sets.batch_size)
 
     # get RMSE for Age
-    age_rmse = rmse(y_pred[:,1], y[:,1])
-    print('age rsme: ', age_rmse)
-    print('age act: ', torch.mean(y[:,1]))
-    print('age pred: ', torch.mean(y_pred[:,1]))
+    # age_rmse = rmse(y_pred[:,1], y[:,1])
+    # print('age rsme: ', age_rmse)
+    # print('age act: ', torch.mean(y[:,1]))
+    # print('age pred: ', torch.mean(y_pred[:,1]))
     # print('age RMSE: ',age_rmse / sets.batch_size)
 
     # get accuracy for sex
