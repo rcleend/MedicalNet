@@ -69,8 +69,8 @@ def train(data_loader, test_loader, model, optimizer, scheduler, total_epochs, s
             update_accuracy(train_acc, y_pred, y_batch, sets)
 
             writer.add_scalar("Loss/train", loss, idx)
-            writer.add_scalar("Accuracy_FVC/train", train_acc['fvc']/sets.batch_size, idx)
-            writer.add_scalar("Accuracy_Age/train", train_acc['age']/sets.batch_size, idx)
+            writer.add_scalar("Accuracy/train_fvc", train_acc['fvc']/sets.batch_size, idx)
+            writer.add_scalar("Accuracy/train_age", train_acc['age']/sets.batch_size, idx)
 
             loss.backward()                
             optimizer.step()
@@ -110,16 +110,16 @@ def train(data_loader, test_loader, model, optimizer, scheduler, total_epochs, s
 def update_accuracy(accuracy, y_pred, y, sets):
     # get RMSE for FVC
     fvc_rmse = rmse(torch.log(y_pred[:,0] + 1 ), torch.log(y[:,0] + 1))
-    print('fvc act: ',torch.log(y[:,0] + 1) / sets.batch_size)
-    print('fvc pred: ',torch.log(y_pred[:,0] + 1) / sets.batch_size)
-    print('fvc RMSE: ',fvc_rmse / sets.batch_size)
+    # print('fvc act: ',torch.log(y[:,0] + 1) / sets.batch_size)
+    # print('fvc pred: ',torch.log(y_pred[:,0] + 1) / sets.batch_size)
+    # print('fvc RMSE: ',fvc_rmse / sets.batch_size)
 
     accuracy['fvc'] += fvc_rmse / sets.batch_size
     # get RMSE for Age
     age_rmse = rmse(y_pred[:,1], y[:,1])
-    print('age act: ',y[:,1] / sets.batch_size)
-    print('age pred: ',y_pred[:,1] / sets.batch_size)
-    print('age RMSE: ',age_rmse / sets.batch_size)
+    # print('age act: ',y[:,1] / sets.batch_size)
+    # print('age pred: ',y_pred[:,1] / sets.batch_size)
+    # print('age RMSE: ',age_rmse / sets.batch_size)
     accuracy['age'] += age_rmse / sets.batch_size
 
     # get accuracy for sex
