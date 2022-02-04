@@ -64,7 +64,10 @@ def train(data_loader, test_loader, model, optimizer, scheduler, total_epochs, s
             # Calculate loss using mean squared error
             loss = custom_loss(y_pred.to(torch.float32), y_batch.to(torch.float32)) / sets.batch_size
 
-            fvc_rmse = get_accuracy(y_pred, y_batch, sets)
+            fvc_rmse = rmse(y_pred, y_batch)
+            print('fvc_rmse: ', fvc_rmse)
+            print('fvc pred: ', y_pred)
+            print('acc pred: ', y)
             writer.add_scalar("Accuracy/train_fvc", fvc_rmse, idx)
             # writer.add_scalar("Accuracy/train_age", age_rmse, idx)
 
@@ -108,13 +111,13 @@ def train(data_loader, test_loader, model, optimizer, scheduler, total_epochs, s
     
     print('Finished training')            
 
-def get_accuracy(y_pred, y, sets):
+# def get_accuracy(y_pred, y, sets):
     # get RMSE for FVC
-    fvc_rmse = rmse(y_pred, y)
-    print('fvc rsme: ', fvc_rmse)
-    print('fvc act: ', torch.mean(y))
-    print('fvc pred: ', torch.mean(y_pred))
-    return fvc_rmse
+    # fvc_rmse = rmse(y_pred, y)
+    # print('fvc rsme: ', fvc_rmse)
+    # print('fvc act: ', torch.mean(y))
+    # print('fvc pred: ', torch.mean(y_pred))
+    # return fvc_rmse
     # print('fvc RMSE: ',fvc_rmse / sets.batch_size)
 
     # get RMSE for Age
