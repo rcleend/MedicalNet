@@ -49,8 +49,6 @@ def train(data_loader, test_loader, model, optimizer, scheduler, total_epochs, s
         
         log.info('lr = {}'.format(scheduler.get_last_lr()))
 
-        test_acc = {'fvc': 0, 'age': 0}
-        train_acc = {'fvc': 0, 'age': 0}
         for batch_id, (x_batch, y_batch) in enumerate(data_loader):
             model.train()
 
@@ -66,7 +64,10 @@ def train(data_loader, test_loader, model, optimizer, scheduler, total_epochs, s
             # Calculate loss using mean squared error
             loss = custom_loss(y_pred.to(torch.float32), y_batch.to(torch.float32)) / sets.batch_size
 
-            update_accuracy(train_acc, y_pred, y_batch, sets)
+            fvc, age = get_accuracy(y_pred, y_batch, sets)
+            writer.add_scalar("Accuracy/train_fvc", train_acc['fvc'], idx)
+            writer.add_scalar("Accuracy/train_age", train_acc['age'], idx)
+
 
             writer.add_scalar("Loss/train", loss, idx)
 
@@ -100,29 +101,27 @@ def train(data_loader, test_loader, model, optimizer, scheduler, total_epochs, s
 
             idx += 1
 
-        writer.add_scalar("Accuracy/train_fvc", train_acc['fvc'], idx)
-        writer.add_scalar("Accuracy/train_age", train_acc['age'], idx)
-
+        
 
         
         scheduler.step()
     
     print('Finished training')            
 
-def update_accuracy(accuracy, y_pred, y, sets):
+def get_accuracy(y_pred, y, sets):
     # get RMSE for FVC
-    fvc_rmse = rmse(torch.log(y_pred[:,0] + 1 ), torch.log(y[:,0] + 1))
+    fvc_rmse = rmse(y_pred[:,0], y[:,0]) / sets.batch_size
+    print('fvc rsme: ', fvc_rmse)
     # print('fvc act: ',torch.log(y[:,0] + 1) / sets.batch_size)
     # print('fvc pred: ',torch.log(y_pred[:,0] + 1) / sets.batch_size)
     # print('fvc RMSE: ',fvc_rmse / sets.batch_size)
 
-    accuracy['fvc'] += fvc_rmse / sets.batch_size
     # get RMSE for Age
-    age_rmse = rmse(y_pred[:,1], y[:,1])
+    age_rmse = rmse(y_pred[:,1], y[:,1]) / sets.batch_size
+    print('age rsme: ', age_rmse)
     # print('age act: ',y[:,1] / sets.batch_size)
     # print('age pred: ',y_pred[:,1] / sets.batch_size)
     # print('age RMSE: ',age_rmse / sets.batch_size)
-    accuracy['age'] += age_rmse / sets.batch_size
 
     # get accuracy for sex
     # sex_acc = bce(y_pred[:,2],y[:,2])
@@ -132,6 +131,7 @@ def update_accuracy(accuracy, y_pred, y, sets):
     # smok_acc = bce(y_pred[:,3:6],y[:,3:6])
     # print('smk: ', smok_acc)
     # accuracy['smoking'].append()
+    return (fvc_rmse, age_rmse)
 
 def rmse(pred, target):
     return torch.sqrt(mse(pred, target))
