@@ -54,7 +54,7 @@ class CustomLoss(nn.Module):
 
     def forward(self, input, target):
         # return self.fvc_loss(input[:,0],target[:,0]) + self.mse(input[:,1],target[:,1]) + self.bce(input[:,2:6],target[:,2:6])
-        return self.fvc_loss(input[:,0],target[:,0])
+        return self.fvc_loss(input,target)
 
 class CustomDenseLayer(nn.Module):
   """
