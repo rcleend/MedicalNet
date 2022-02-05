@@ -38,15 +38,15 @@ def test(data_loader, model, sets):
         y_pred = model(x)
 
         # Get sigmoid of y_pred and append to all_y_pred
-        all_fvc_pred.append(torch.sigmoid(y_pred[:,2]).cpu().detach().numpy())
-        all_fvc.append(y[:,2].cpu().detach().numpy())
+        all_fvc_pred.append(torch.sigmoid(y_pred[:,2]).item())
+        all_fvc.append(y[:,2].item())
 
         
         # update accuracy
         # update_acc(acc, y_pred, y, sets)
     print(all_fvc_pred)
     print(all_fvc)
-    
+
     # fpr, tpr, _ = roc_curve(all_fvc, all_fvc_pred)
     # roc_auc = auc(fpr, tpr)
     # plot_roc(fpr,tpr, roc_auc)
