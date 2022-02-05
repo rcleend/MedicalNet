@@ -60,6 +60,7 @@ class CustomLoss(nn.Module):
         elif self.opt.multi_task == 'fvc_age':
           return self.rmse(input[:,0],target[:,0]) + self.rmse(input[:,1],target[:,1])
         else:
+          print('bce: ', self.bce(input[:,2:6],target[:,2:6]))
           return self.rmse(input[:,0],target[:,0]) + self.rmse(input[:,1],target[:,1]) + self.bce(input[:,2:6],target[:,2:6])
 
 class CustomDenseLayer(nn.Module):
