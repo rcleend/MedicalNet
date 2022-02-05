@@ -115,6 +115,8 @@ def parse_opts():
         default='fvc',
         type=str,
         help='(fvc | fvc_age | meta)')
+    parser.add_argument(
+        '--no_log', action='store_true', help='If true, tensorboard logging is not used.')
     args = parser.parse_args()
     args.save_folder = "./trails/models/{}_{}".format(args.model, args.model_depth)
     

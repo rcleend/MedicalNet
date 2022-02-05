@@ -65,17 +65,16 @@ def train(data_loader, test_loader, model, optimizer, scheduler, total_epochs, s
 
             update_acc(acc, y_pred, y_batch, sets)
 
-            # log_acc(acc, sets, 1)
+            if not sets.no_log:
+                writer.add_scalar("Accuracy/train_fvc", acc['fvc_sum'], idx)
+                if sets.multi_task == 'fvc_age':
+                    writer.add_scalar("Accuracy/train_age", acc['age_sum'], idx)
+                elif sets.multi_task == 'meta':
+                    writer.add_scalar("Accuracy/train_age", acc['age_sum'], idx)
+                    writer.add_scalar("Accuracy/train_sex", accuracy_score(acc['sex_true'], acc['sex_pred']), idx)
+                    writer.add_scalar("Accuracy/train_smk", accuracy_score(acc['smk_true'], acc['smk_pred']), idx)
 
-            writer.add_scalar("Accuracy/train_fvc", acc['fvc_sum'], idx)
-            if sets.multi_task == 'fvc_age':
-                writer.add_scalar("Accuracy/train_age", acc['age_sum'], idx)
-            elif sets.multi_task == 'meta':
-                writer.add_scalar("Accuracy/train_age", acc['age_sum'], idx)
-                writer.add_scalar("Accuracy/train_sex", accuracy_score(acc['sex_true'], acc['sex_pred']), idx)
-                writer.add_scalar("Accuracy/train_smk", accuracy_score(acc['smk_true'], acc['smk_pred']), idx)
-
-            writer.add_scalar("Loss/train", loss, idx)
+                writer.add_scalar("Loss/train", loss, idx)
 
             loss.backward()                
             optimizer.step()
@@ -101,7 +100,8 @@ def train(data_loader, test_loader, model, optimizer, scheduler, total_epochs, s
                 total_loss_test += custom_loss(y_pred.to(torch.float32), y_batch.to(torch.float32))
 
 
-            writer.add_scalar("Loss/test", total_loss_test / len(test_loader), idx)
+            if not sets.no_log:
+                writer.add_scalar("Loss/test", total_loss_test / len(test_loader), idx)
 
 
             idx += 1
