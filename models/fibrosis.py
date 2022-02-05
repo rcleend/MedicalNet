@@ -48,6 +48,7 @@ class CustomLoss(nn.Module):
         super().__init__()
         self.mse = nn.MSELoss()
         self.bce = nn.BCELoss()
+        self.ce = nn.CrossEntropyLoss()
         self.opt = opt
         
     def rmse(self, input, target):
@@ -60,7 +61,7 @@ class CustomLoss(nn.Module):
         elif self.opt.multi_task == 'fvc_age':
           return self.rmse(input[:,0],target[:,0]) + self.rmse(input[:,1],target[:,1])
         else:
-          return self.rmse(input[:,0],target[:,0]) + self.rmse(input[:,1],target[:,1]) + self.bce(input[:,2:6],target[:,2:6])
+          return self.rmse(input[:,0],target[:,0]) + self.rmse(input[:,1],target[:,1]) + self.bce(input[:,2],target[:,2]) + self.ce(input[:,3:6], target[:,3:6])
 
 class CustomDenseLayer(nn.Module):
   """
@@ -94,6 +95,6 @@ class CustomDenseLayer(nn.Module):
 
       if self.opt.multi_task == 'meta':
       #note: we clone the x tensors to prevent modification before computing the gradient
-        x[:,2] = self.sigmoid(x[:,2].clone()) # Male/female
+        x[:,2:6] = self.sigmoid(x[:,2:6].clone()) # Male/female
         # x[:,3:6] = self.softmax(x[:,3:6].clone()) # Smoking Status
       return x
