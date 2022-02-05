@@ -30,6 +30,7 @@ class FibrosisDataset(Dataset):
         self.input_H = sets.input_H
         self.input_W = sets.input_W
         self.phase = sets.phase
+        self.multi_ask = sets.multi_task
 
     def __len__(self):
         return len(self.entries)
@@ -87,6 +88,10 @@ class FibrosisDataset(Dataset):
         # Get smoking values
         y_smk, y_ex_smk, y_non_smk = self.__get_smoking_values(i)
 
-        y = torch.tensor([y_fvc, y_age, y_is_male, y_smk, y_ex_smk, y_non_smk], dtype=torch.float32)
+        y = torch.tensor([y_fvc], dtype=torch.float32)
+        if self.multi_ask == 'fvc_age':
+            y = torch.tensor([y_fvc, y_age], dtype=torch.float32)
+        elif self.multi_ask == 'meta':
+            y = torch.tensor([y_fvc, y_age, y_is_male, y_smk, y_ex_smk, y_non_smk], dtype=torch.float32)
 
-        return x_img, torch.tensor(y_fvc)
+        return x_img, y
