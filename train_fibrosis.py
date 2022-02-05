@@ -148,6 +148,8 @@ def smk_acc(y_pred, y):
 
 
 def sex_acc(y_pred, y):
+    print('sex true',y)
+    print('sex pred',y_pred > 0.5)
     return y, y_pred > 0.5
 
 
