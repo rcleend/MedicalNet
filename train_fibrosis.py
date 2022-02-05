@@ -86,7 +86,6 @@ def train(data_loader, test_loader, model, optimizer, scheduler, total_epochs, s
 
             # Save model on specific intervals
             if idx % save_interval == 0:
-                print('pred: ', y_pred)
                 save_model(save_folder, model, optimizer, epoch, batch_id)
 
             model.eval()
