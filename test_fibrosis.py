@@ -33,10 +33,10 @@ def test(data_loader, model, sets):
         y_pred = model(x)
 
         print('Predicted values')
-        print(y_pred)
+        print(y_pred.cpu().detach().numpy().tolist())
 
         print('True values')
-        print(y)
+        print(y.cpu().detach().numpy().tolist())
 
 
         # update accuracy
