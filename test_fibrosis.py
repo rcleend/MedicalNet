@@ -44,9 +44,12 @@ def test(data_loader, model, sets):
         
         # update accuracy
         # update_acc(acc, y_pred, y, sets)
-    fpr, tpr, _ = roc_curve(all_fvc, all_fvc_pred)
-    roc_auc = auc(fpr, tpr)
-    plot_roc(fpr,tpr, roc_auc)
+    print(all_fvc_pred)
+    print(all_fvc)
+    
+    # fpr, tpr, _ = roc_curve(all_fvc, all_fvc_pred)
+    # roc_auc = auc(fpr, tpr)
+    # plot_roc(fpr,tpr, roc_auc)
     # fpr["micro"], tpr["micro"], _ = roc_curve(y_test.ravel(), y_score.ravel())
     # roc_auc["micro"] = auc(fpr["micro"], tpr["micro"])
     # print accuracy
