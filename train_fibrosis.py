@@ -144,7 +144,7 @@ def smk_acc(y_pred, y):
     pred = torch.argmax(y_pred) 
     print('smk true',true)
     print('smk pred',pred)
-    return true, pred
+    return true.cpu().detach().numpy(), pred.cpu().detach().numpy()
 
 
 def sex_acc(y_pred, y):
