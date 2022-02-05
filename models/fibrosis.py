@@ -69,13 +69,19 @@ class CustomDenseLayer(nn.Module):
   """
   def __init__(self, opt, input=100,n_hidden=10):
     super().__init__()
+    n_output = 1
+    if opt.multi_task == 'fvc_age':
+      n_output = 2
+    elif opt.multi_task == 'meta':
+      n_output = 6
+
     self.n_hidden=n_hidden
     self.input = input
     self.relu = nn.ReLU(inplace=False)
     self.sigmoid = nn.Sigmoid()
     self.flatten = nn.Flatten()
     self.linear = nn.Linear(input,self.n_hidden)
-    self.linear2 = nn.Linear(self.n_hidden,1)
+    self.linear2 = nn.Linear(self.n_hidden,n_output)
     self.softmax = nn.Softmax()
     self.opt = opt
 
