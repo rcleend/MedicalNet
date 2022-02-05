@@ -32,6 +32,13 @@ def test(data_loader, model, sets):
         x, y = x.to(device), y.to(device)
         y_pred = model(x)
 
+        print('Predicted values')
+        print(y_pred)
+
+        print('True values')
+        print(y)
+
+
         # update accuracy
         update_acc(acc, y_pred, y, sets)
     
