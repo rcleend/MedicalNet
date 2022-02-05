@@ -54,6 +54,10 @@ def log_acc(acc, sets, n_data):
     else:
         print('avg fvc loss: ', acc['fvc_sum'].item() / n_data)
         print('avg age loss: ', acc['age_sum'].item() / n_data)
+        print('sex true: ', acc['sex_true'])
+        print('sex pred: ', acc['sex_pred'])
+        print('smk true: ', acc['smk_true'])
+        print('smk pred: ', acc['smk_pred'])
         print('sex acc: ', accuracy_score(acc['sex_true'], acc['sex_pred']))
         print('smk acc: ', accuracy_score(acc['smk_true'], acc['smk_pred']))
 
