@@ -57,7 +57,7 @@ class CustomLoss(nn.Module):
     def forward(self, input, target):
         if self.opt.multi_task == 'fvc':
           return self.rmse(input,target)
-        elif self.opt.multi_task == 'fvc':
+        elif self.opt.multi_task == 'fvc_age':
           return self.rmse(input[:,0],target[:,0]) + self.rmse(input[:,1],target[:,1])
         else:
           return self.rmse(input[:,0],target[:,0]) + self.rmse(input[:,1],target[:,1]) + self.bce(input[:,2:6],target[:,2:6])
