@@ -30,19 +30,22 @@ def test(data_loader, model, sets):
     else:
         device = torch.device('cpu')
 
-    fpr = dict()
-    tpr = dict()
-    roc_auc = dict()
+    all_fvc_pred = []
+    all_fvc = []
     acc = {'fvc_sum': 0, 'age_sum': 0, 'sex_true': [], 'sex_pred': [], 'smk_true': [], 'smk_pred': []}
     for i, (x, y) in enumerate(data_loader):
         x, y = x.to(device), y.to(device)
         y_pred = model(x)
 
-        fpr[i], tpr[i], _ = roc_curve(y[:,2].cpu().detach().numpy(), y_pred[:, 2].cpu().detach().numpy())
-        roc_auc[i] = auc(fpr[i], tpr[i])
+        # Get sigmoid of y_pred and append to all_y_pred
+        all_fvc_pred.append(nn.functional.sigmoid(y_pred[:,2].cpu().detach().numpy()))
+        all_fvc.append(y[:,2].cpu().detach().numpy())
+
+        
         # update accuracy
         # update_acc(acc, y_pred, y, sets)
-    
+    fpr, tpr, _ = roc_curve(all_fvc, all_fvc_pred)
+    roc_auc = auc(fpr, tpr)
     plot_roc(fpr,tpr, roc_auc)
     # fpr["micro"], tpr["micro"], _ = roc_curve(y_test.ravel(), y_score.ravel())
     # roc_auc["micro"] = auc(fpr["micro"], tpr["micro"])
@@ -53,11 +56,11 @@ def plot_roc(fpr, tpr, roc_auc):
     plt.figure()
     lw = 2
     plt.plot(
-        fpr[2],
-        tpr[2],
+        fpr,
+        tpr,
         color="darkorange",
         lw=lw,
-        label="ROC curve (area = %0.2f)" % roc_auc[2],
+        label="ROC curve (area = %0.2f)" % roc_auc,
     )
     plt.plot([0, 1], [0, 1], color="navy", lw=lw, linestyle="--")
     plt.xlim([0.0, 1.0])
