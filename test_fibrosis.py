@@ -14,7 +14,10 @@ from utils.logger import log
 import pandas as pd
 import numpy as np
 import torch.nn as nn
+import matplotlib as plt
 from sklearn.metrics import accuracy_score
+from sklearn.metrics import roc_curve, auc
+
 
 from torchsummary import summary
 from torch.utils.tensorboard import SummaryWriter
@@ -27,23 +30,43 @@ def test(data_loader, model, sets):
     else:
         device = torch.device('cpu')
 
+    fpr = dict()
+    tpr = dict()
+    roc_auc = dict()
     acc = {'fvc_sum': 0, 'age_sum': 0, 'sex_true': [], 'sex_pred': [], 'smk_true': [], 'smk_pred': []}
     for i, (x, y) in enumerate(data_loader):
         x, y = x.to(device), y.to(device)
         y_pred = model(x)
 
-        print('Predicted values')
-        print(y_pred.cpu().detach().numpy().tolist())
-
-        print('True values')
-        print(y.cpu().detach().numpy().tolist())
-
-
+        fpr[i], tpr[i], _ = roc_curve(y[:,2].cpu().detach().numpy(), y_pred[:, 2].cpu().detach().numpy())
+        roc_auc[i] = auc(fpr[i], tpr[i])
         # update accuracy
-        update_acc(acc, y_pred, y, sets)
+        # update_acc(acc, y_pred, y, sets)
     
+    plot_roc(fpr,tpr, roc_auc)
+    # fpr["micro"], tpr["micro"], _ = roc_curve(y_test.ravel(), y_score.ravel())
+    # roc_auc["micro"] = auc(fpr["micro"], tpr["micro"])
     # print accuracy
-    log_acc(acc, sets, len(data_loader.dataset))
+    # log_acc(acc, sets, len(data_loader.dataset))
+
+def plot_roc(fpr, tpr, roc_auc):
+    plt.figure()
+    lw = 2
+    plt.plot(
+        fpr[2],
+        tpr[2],
+        color="darkorange",
+        lw=lw,
+        label="ROC curve (area = %0.2f)" % roc_auc[2],
+    )
+    plt.plot([0, 1], [0, 1], color="navy", lw=lw, linestyle="--")
+    plt.xlim([0.0, 1.0])
+    plt.ylim([0.0, 1.05])
+    plt.xlabel("False Positive Rate")
+    plt.ylabel("True Positive Rate")
+    plt.title("Receiver operating characteristic example")
+    plt.legend(loc="lower right")
+    plt.show()
 
 def log_acc(acc, sets, n_data):
     if sets.multi_task == 'fvc':
