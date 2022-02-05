@@ -82,7 +82,7 @@ class CustomDenseLayer(nn.Module):
     self.flatten = nn.Flatten()
     self.linear = nn.Linear(input,self.n_hidden)
     self.linear2 = nn.Linear(self.n_hidden,n_output)
-    self.softmax = nn.Softmax()
+    self.softmax = nn.Softmax(dim=1)
     self.opt = opt
 
   def forward(self, x):
@@ -95,5 +95,5 @@ class CustomDenseLayer(nn.Module):
       if self.opt.multi_task == 'meta':
       #note: we clone the x tensors to prevent modification before computing the gradient
         x[:,2] = self.sigmoid(x[:,2].clone()) # Male/female
-        x[:,3:6] = self.softmax(x[:,3:6].clone(), dim=1) # Smoking Status
+        x[:,3:6] = self.softmax(x[:,3:6].clone()) # Smoking Status
       return x
