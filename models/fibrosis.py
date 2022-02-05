@@ -92,9 +92,8 @@ class CustomDenseLayer(nn.Module):
       x = self.relu(x)
       x = self.linear2(x)
 
-      if self.opt.multi_task == 'fvc_age':
+      if self.opt.multi_task == 'meta':
       #note: we clone the x tensors to prevent modification before computing the gradient
         x[:,2] = self.sigmoid(x[:,2].clone()) # Male/female
-      elif self.opt.multi_task == 'meta':
         x[:,3:6] = self.softmax(x[:,3:6].clone()) # Smoking Status
       return x
