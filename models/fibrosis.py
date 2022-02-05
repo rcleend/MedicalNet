@@ -61,6 +61,7 @@ class CustomLoss(nn.Module):
         elif self.opt.multi_task == 'fvc_age':
           return self.rmse(input[:,0],target[:,0]) + self.rmse(input[:,1],target[:,1])
         else:
+          print('ololololol')
           print('BCE: ', self.bce(input[:,2], target[:,2]))
           print('CE: ', self.bce(input[:,3:6], target[:,3:6]))
           return self.rmse(input[:,0],target[:,0]) + self.rmse(input[:,1],target[:,1]) + self.bce(input[:,2],target[:,2]) + self.ce(input[:,3:6], target[:,3:6])
