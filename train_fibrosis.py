@@ -144,10 +144,10 @@ def update_acc(acc, y_pred, y, sets):
 def smk_acc(y_pred, y):
     true = torch.argmax(y) 
     pred = torch.argmax(y_pred) 
-    # print('smk y_pred',y_pred)
-    # print('smk y', y)
-    # print('smk pred',true)
-    # print('smk true',true)
+    print('smk y_pred',y_pred)
+    print('smk y', y)
+    print('smk pred',true)
+    print('smk true',true)
     return true.cpu().detach().numpy().tolist(), pred.cpu().detach().numpy().tolist()
 
 
