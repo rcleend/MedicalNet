@@ -110,6 +110,11 @@ def parse_opts():
         '--manual_seed', default=1, type=int, help='Manually set random seed')
     parser.add_argument(
         '--ci_test', action='store_true', help='If true, ci testing is used.')
+    parser.add_argument(
+        '--eval',
+        default='fvc',
+        type=str,
+        help='(fvc | fvc_age | meta)')
     args = parser.parse_args()
     args.save_folder = "./trails/models/{}_{}".format(args.model, args.model_depth)
     
