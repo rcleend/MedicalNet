@@ -51,7 +51,6 @@ def log_acc(acc, sets, n_data):
         print('smk acc: ', accuracy_score(acc['smk_true'], acc['smk_pred']))
 
 def update_acc(acc, y_pred, y, sets):
-    # Update correct accuracy based on type of prediction
     if sets.multi_task == 'fvc':
         acc['fvc_sum'] += rmse(y_pred, y)
     elif sets.multi_task == 'fvc_age':
@@ -61,26 +60,19 @@ def update_acc(acc, y_pred, y, sets):
         acc['fvc_sum'] += rmse(y_pred[:,0], y[:,0])
         acc['age_sum'] += rmse(y_pred[:,1], y[:,1])
         sex_true, sex_pred = sex_acc(y_pred[:,2], y[:,2])
-        acc['sex_true'].append(sex_true)
-        acc['sex_pred'].append(sex_pred)
+        acc['sex_true'] = sex_true
+        acc['sex_pred'] = sex_pred
         smk_true, smk_pred = smk_acc(y_pred[:,3:6], y[:,3:6])
-        acc['smk_true'].append(smk_true)
-        acc['smk_pred'].append(smk_pred)
+        acc['smk_true']  = smk_true
+        acc['smk_pred'] = smk_pred
 
 def smk_acc(y_pred, y):
-    true = torch.argmax(y) 
-    pred = torch.argmax(y_pred) 
-    print('smk y_pred',y_pred)
-    print('smk y',pred)
-    print('smk true',true)
-    return true, pred
-
+    true = torch.argmax(y, dim=1) 
+    pred = torch.argmax(y_pred, dim=1) 
+    return true.cpu().detach().numpy().tolist(), pred.cpu().detach().numpy().tolist()
 
 def sex_acc(y_pred, y):
-    print('sex y_pred: ', y_pred)
-    print('sex y_pred: ', y_pred > 0.5)
-    print('sex y: ', y)
-    return y, y_pred > 0.5
+    return (y > 0.5).cpu().detach().numpy().tolist(), (y_pred > 0.5).cpu().detach().numpy().tolist()
 
 def rmse(pred, target):
     return torch.sqrt(mse(pred, target))
