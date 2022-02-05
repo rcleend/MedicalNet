@@ -52,7 +52,6 @@ class CustomLoss(nn.Module):
         self.opt = opt
         
     def rmse(self, input, target):
-      #  return torch.sqrt(self.mse(torch.log(input + 1), torch.log(target + 1)))
        return torch.sqrt(self.mse(input, target))
 
     def forward(self, input, target):
@@ -61,9 +60,6 @@ class CustomLoss(nn.Module):
         elif self.opt.multi_task == 'fvc_age':
           return self.rmse(input[:,0],target[:,0]) + self.rmse(input[:,1],target[:,1])
         else:
-          print('ololololol')
-          print('BCE: ', self.bce(input[:,2], target[:,2]))
-          print('CE: ', self.bce(input[:,3:6], target[:,3:6]))
           return self.rmse(input[:,0],target[:,0]) + self.rmse(input[:,1],target[:,1]) + self.bce(input[:,2],target[:,2]) + self.ce(input[:,3:6], target[:,3:6])
 
 class CustomDenseLayer(nn.Module):
@@ -96,9 +92,4 @@ class CustomDenseLayer(nn.Module):
       x = self.relu(x)
       x = self.linear2(x)
 
-      # if self.opt.multi_task == 'meta':
-      #note: we clone the x tensors to prevent modification before computing the gradient
-        # x[:,2] = self.sigmoid(x[:,2].clone()) # Male/female
-        # print('SMOKINGGG', x[:,3:6])          
-        # x[:,3:6] = self.softmax(x[:,3:6].clone()) # Smoking Status
       return x
