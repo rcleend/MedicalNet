@@ -41,13 +41,13 @@ def test(data_loader, model, sets):
 
 def log_acc(acc, sets, data_loader):
     if sets.eval == 'fvc':
-        print('avg fvc loss: ', acc['fvc_sum'] / len(data_loader.dataset))
+        print('avg fvc loss: ', acc['fvc_sum'].item() / len(data_loader.dataset))
     elif sets.eval == 'fvc_age':
-        print('avg fvc loss: ', acc['fvc_sum'] / len(data_loader.dataset))
-        print('avg age loss: ', acc['age_sum'] / len(data_loader.dataset))
+        print('avg fvc loss: ', acc['fvc_sum'].item() / len(data_loader.dataset))
+        print('avg age loss: ', acc['age_sum'].item() / len(data_loader.dataset))
     else:
-        print('avg fvc loss: ', acc['fvc_sum'] / len(data_loader.dataset))
-        print('avg age loss: ', acc['age_sum'] / len(data_loader.dataset))
+        print('avg fvc loss: ', acc['fvc_sum'].item() / len(data_loader.dataset))
+        print('avg age loss: ', acc['age_sum'].item() / len(data_loader.dataset))
         print('sex acc: ', accuracy_score(acc['sex_true'], acc['sex_pred']))
         print('smk acc: ', accuracy_score(acc['smk_true'], acc['smk_pred']))
 
