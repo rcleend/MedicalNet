@@ -19,10 +19,10 @@ from scipy import ndimage
 import os
 from torchsummary import summary
 from torch.utils.tensorboard import SummaryWriter
+from sklearn.metrics import accuracy_score
+
 
 mse = nn.MSELoss()
-bce = nn.BCELoss()
-
 
 def train(data_loader, test_loader, model, optimizer, scheduler, total_epochs, save_interval, save_folder, sets):
     batches_per_epoch = len(data_loader)
@@ -51,6 +51,7 @@ def train(data_loader, test_loader, model, optimizer, scheduler, total_epochs, s
 
         for batch_id, (x_batch, y_batch) in enumerate(data_loader):
             model.train()
+            acc = {'fvc_sum': 0, 'age_sum': 0, 'sex_true': [], 'sex_pred': [], 'smk_true': [], 'smk_pred': []}
 
             y_batch = y_batch.to(device)
             x_batch = x_batch.to(device)
@@ -64,12 +65,16 @@ def train(data_loader, test_loader, model, optimizer, scheduler, total_epochs, s
             # Calculate loss using mean squared error
             loss = custom_loss(y_pred.to(torch.float32), y_batch.to(torch.float32)) #/  sets.batch_size
 
-            fvc_rmse = rmse(y_pred, y_batch)
-            print('pred: ',torch.mean(y_pred))
-            print('act: ',torch.mean(y_batch))
-            writer.add_scalar("Accuracy/train_fvc", fvc_rmse, idx)
-            # writer.add_scalar("Accuracy/train_age", age_rmse, idx)
+            update_acc(acc, y_pred, y_batch, sets)
 
+            log_acc(acc, sets, sets.batch_size)
+
+            writer.add_scalar("Accuracy/train_fvc", acc['fvc_sum'] / sets.batch_size, idx)
+            if sets.multi_task == 'fvc_age':
+                writer.add_scalar("Accuracy/train_age", acc['age_sum'] / sets.batch_size, idx)
+            elif sets.multi_task == 'meta':
+                writer.add_scalar("Accuracy/train_sex", accuracy_score(acc['sex_true'], acc['sex_pred']), idx)
+                writer.add_scalar("Accuracy/train_smk", accuracy_score(acc['smk_true'], acc['smk_pred']), idx)
 
             writer.add_scalar("Loss/train", loss, idx)
 
@@ -103,38 +108,49 @@ def train(data_loader, test_loader, model, optimizer, scheduler, total_epochs, s
 
             idx += 1
 
-        
-
-        
         scheduler.step()
     
     print('Finished training')            
 
-# def get_accuracy(y_pred, y, sets):
-    # get RMSE for FVC
-    # fvc_rmse = rmse(y_pred, y)
-    # print('fvc rsme: ', fvc_rmse)
-    # print('fvc act: ', torch.mean(y))
-    # print('fvc pred: ', torch.mean(y_pred))
-    # return fvc_rmse
-    # print('fvc RMSE: ',fvc_rmse / sets.batch_size)
+def log_acc(acc, sets, n_data):
+    if sets.multi_task == 'fvc':
+        print('avg fvc loss: ', acc['fvc_sum'].item() / n_data)
+    elif sets.multi_task == 'fvc_age':
+        print('avg fvc loss: ', acc['fvc_sum'].item() / n_data)
+        print('avg age loss: ', acc['age_sum'].item() / n_data)
+    else:
+        print('avg fvc loss: ', acc['fvc_sum'].item() / n_data)
+        print('avg age loss: ', acc['age_sum'].item() / n_data)
+        print('sex acc: ', accuracy_score(acc['sex_true'], acc['sex_pred']))
+        print('smk acc: ', accuracy_score(acc['smk_true'], acc['smk_pred']))
 
-    # get RMSE for Age
-    # age_rmse = rmse(y_pred[:,1], y[:,1])
-    # print('age rsme: ', age_rmse)
-    # print('age act: ', torch.mean(y[:,1]))
-    # print('age pred: ', torch.mean(y_pred[:,1]))
-    # print('age RMSE: ',age_rmse / sets.batch_size)
+def update_acc(acc, y_pred, y, sets):
+    # Update correct accuracy based on type of prediction
+    if sets.multi_task == 'fvc':
+        acc['fvc_sum'] += rmse(y_pred, y)
+    elif sets.multi_task == 'fvc_age':
+        acc['fvc_sum'] += rmse(y_pred[:,0], y[:,0])
+        acc['age_sum'] += rmse(y_pred[:,1], y[:,1])
+    else:
+        acc['fvc_sum'] += rmse(y_pred[:,0], y[:,0])
+        acc['age_sum'] += rmse(y_pred[:,1], y[:,1])
+        sex_true, sex_pred = sex_acc(y_pred[:,2], y[:,2])
+        acc['sex_true'].append(sex_true)
+        acc['sex_pred'].append(sex_pred)
+        smk_true, smk_pred = smk_acc(y_pred[:,3:6], y[:,3:6])
+        acc['smk_true'].append(smk_true)
+        acc['smk_pred'].append(smk_pred)
 
-    # get accuracy for sex
-    # sex_acc = bce(y_pred[:,2],y[:,2])
-    # print('sex: ',sex_acc)
-    # accuracy['sex'].append(
-    # get accuracy for smoking
-    # smok_acc = bce(y_pred[:,3:6],y[:,3:6])
-    # print('smk: ', smok_acc)
-    # accuracy['smoking'].append()
-    # return (fvc_rmse, age_rmse)
+def smk_acc(y_pred, y):
+    true = torch.argmax(y) 
+    pred = torch.argmax(y_pred) 
+    print('smk true',true)
+    print('smk pred',pred)
+    return true, pred
+
+
+def sex_acc(y_pred, y):
+    return y, y_pred > 0.5
 
 
 def rmse(pred, target):

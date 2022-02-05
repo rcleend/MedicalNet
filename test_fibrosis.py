@@ -20,7 +20,6 @@ from torchsummary import summary
 from torch.utils.tensorboard import SummaryWriter
 
 mse = nn.MSELoss()
-bce = nn.BCELoss()
 
 def test(data_loader, model, sets):
     if torch.cuda.is_available():
@@ -37,25 +36,25 @@ def test(data_loader, model, sets):
         update_acc(acc, y_pred, y, sets)
     
     # print accuracy
-    log_acc(acc, sets, data_loader)
+    log_acc(acc, sets, len(data_loader.dataset))
 
-def log_acc(acc, sets, data_loader):
-    if sets.eval == 'fvc':
-        print('avg fvc loss: ', acc['fvc_sum'].item() / len(data_loader.dataset))
-    elif sets.eval == 'fvc_age':
-        print('avg fvc loss: ', acc['fvc_sum'].item() / len(data_loader.dataset))
-        print('avg age loss: ', acc['age_sum'].item() / len(data_loader.dataset))
+def log_acc(acc, sets, n_data):
+    if sets.multi_task == 'fvc':
+        print('avg fvc loss: ', acc['fvc_sum'].item() / n_data)
+    elif sets.multi_task == 'fvc_age':
+        print('avg fvc loss: ', acc['fvc_sum'].item() / n_data)
+        print('avg age loss: ', acc['age_sum'].item() / n_data)
     else:
-        print('avg fvc loss: ', acc['fvc_sum'].item() / len(data_loader.dataset))
-        print('avg age loss: ', acc['age_sum'].item() / len(data_loader.dataset))
+        print('avg fvc loss: ', acc['fvc_sum'].item() / n_data)
+        print('avg age loss: ', acc['age_sum'].item() / n_data)
         print('sex acc: ', accuracy_score(acc['sex_true'], acc['sex_pred']))
         print('smk acc: ', accuracy_score(acc['smk_true'], acc['smk_pred']))
 
 def update_acc(acc, y_pred, y, sets):
     # Update correct accuracy based on type of prediction
-    if sets.eval == 'fvc':
+    if sets.multi_task == 'fvc':
         acc['fvc_sum'] += rmse(y_pred, y)
-    elif sets.eval == 'fvc_age':
+    elif sets.multi_task == 'fvc_age':
         acc['fvc_sum'] += rmse(y_pred[:,0], y[:,0])
         acc['age_sum'] += rmse(y_pred[:,1], y[:,1])
     else:

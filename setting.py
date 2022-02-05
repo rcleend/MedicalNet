@@ -111,7 +111,7 @@ def parse_opts():
     parser.add_argument(
         '--ci_test', action='store_true', help='If true, ci testing is used.')
     parser.add_argument(
-        '--eval',
+        '--multi_task',
         default='fvc',
         type=str,
         help='(fvc | fvc_age | meta)')
