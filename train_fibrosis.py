@@ -133,11 +133,11 @@ def update_acc(acc, y_pred, y, sets):
         acc['fvc_sum'] += rmse(y_pred[:,0], y[:,0])
         acc['age_sum'] += rmse(y_pred[:,1], y[:,1])
         sex_true, sex_pred = sex_acc(y_pred[:,2], y[:,2])
-        acc['sex_true'].append(sex_true)
-        acc['sex_pred'].append(sex_pred)
+        acc['sex_true'] = sex_true
+        acc['sex_pred'] = sex_pred
         smk_true, smk_pred = smk_acc(y_pred[:,3:6], y[:,3:6])
-        acc['smk_true'].append(smk_true)
-        acc['smk_pred'].append(smk_pred)
+        acc['smk_true']  = smk_true
+        acc['smk_pred'] = smk_pred
 
     print(acc)
 
@@ -148,7 +148,7 @@ def smk_acc(y_pred, y):
     # print('smk y', y)
     # print('smk pred',true)
     # print('smk true',true)
-    return true.cpu().detach().numpy(), pred.cpu().detach().numpy()
+    return true.cpu().detach().numpy().tolist(), pred.cpu().detach().numpy().tolist()
 
 
 def sex_acc(y_pred, y):
@@ -156,7 +156,7 @@ def sex_acc(y_pred, y):
     # print('sex y: ', y)
     # print('sex pred: ', y_pred > 0.5)
     # print('sex true: ', y > 0.5)
-    return (y > 0.5).cpu().detach().numpy(), (y_pred > 0.5).cpu().detach().numpy()
+    return (y > 0.5).cpu().detach().numpy().tolist(), (y_pred > 0.5).cpu().detach().numpy().tolist()
 
 
 def rmse(pred, target):
