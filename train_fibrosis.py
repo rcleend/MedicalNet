@@ -146,7 +146,7 @@ def smk_acc(y_pred, y):
     pred = torch.argmax(y_pred, dim=1) 
     print('smk y_pred',y_pred)
     print('smk y', y)
-    print('smk pred',true)
+    print('smk pred',pred)
     print('smk true',true)
     return true.cpu().detach().numpy().tolist(), pred.cpu().detach().numpy().tolist()
 
