@@ -70,12 +70,16 @@ def update_acc(acc, y_pred, y, sets):
 def smk_acc(y_pred, y):
     true = torch.argmax(y) 
     pred = torch.argmax(y_pred) 
+    print('smk y_pred',y_pred)
+    print('smk y',pred)
     print('smk true',true)
-    print('smk pred',pred)
     return true, pred
 
 
 def sex_acc(y_pred, y):
+    print('sex y_pred: ', y_pred)
+    print('sex y_pred: ', y_pred > 0.5)
+    print('sex y: ', y)
     return y, y_pred > 0.5
 
 def rmse(pred, target):
