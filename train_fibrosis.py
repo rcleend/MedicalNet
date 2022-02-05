@@ -133,11 +133,11 @@ def update_acc(acc, y_pred, y, sets):
         acc['fvc_sum'] += rmse(y_pred[:,0], y[:,0])
         acc['age_sum'] += rmse(y_pred[:,1], y[:,1])
         sex_true, sex_pred = sex_acc(y_pred[:,2], y[:,2])
-        acc['sex_true'].append(sex_true.numpy())
-        acc['sex_pred'].append(sex_pred.numpy())
+        acc['sex_true'].append(sex_true)
+        acc['sex_pred'].append(sex_pred)
         smk_true, smk_pred = smk_acc(y_pred[:,3:6], y[:,3:6])
-        acc['smk_true'].append(smk_true.numpy())
-        acc['smk_pred'].append(smk_pred.numpy())
+        acc['smk_true'].append(smk_true)
+        acc['smk_pred'].append(smk_pred)
 
 def smk_acc(y_pred, y):
     true = torch.argmax(y) 
@@ -148,9 +148,9 @@ def smk_acc(y_pred, y):
 
 
 def sex_acc(y_pred, y):
-    print('sex true',y.numpy())
-    print('sex pred',(y_pred > 0.5).numpy())
-    return y, y_pred > 0.5
+    print('sex true',y.cpu().detach().numpy())
+    print('sex pred',(y_pred > 0.5).cpu().detach().numpy())
+    return y.cpu().detach().numpy(), (y_pred > 0.5).cpu().detach().numpy()
 
 
 def rmse(pred, target):
