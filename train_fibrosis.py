@@ -29,9 +29,7 @@ def train(data_loader, test_loader, model, optimizer, scheduler, total_epochs, s
     log.info('{} epochs in total, {} batches per epoch'.format(total_epochs, batches_per_epoch))
     writer = SummaryWriter()
 
-    custom_loss = CustomLoss()
-    # multi_criterion = nn.MultiLabelSoftMarginLoss(weight=None, reduce=False)
-
+    custom_loss = CustomLoss(sets)
 
     # Enable anomaly detection in backward pass
     torch.autograd.set_detect_anomaly(True)
