@@ -65,7 +65,7 @@ def train(data_loader, test_loader, model, optimizer, scheduler, total_epochs, s
 
             update_acc(acc, y_pred, y_batch, sets)
 
-            log_acc(acc, sets, 1)
+            # log_acc(acc, sets, 1)
 
             writer.add_scalar("Accuracy/train_fvc", acc['fvc_sum'], idx)
             if sets.multi_task == 'fvc_age':
@@ -101,7 +101,7 @@ def train(data_loader, test_loader, model, optimizer, scheduler, total_epochs, s
                 total_loss_test += custom_loss(y_pred.to(torch.float32), y_batch.to(torch.float32))
 
 
-            writer.add_scalar("Loss/test", total_loss_test / batches_per_epoch, idx)
+            writer.add_scalar("Loss/test", total_loss_test / len(test_loader), idx)
 
 
             idx += 1
@@ -138,8 +138,6 @@ def update_acc(acc, y_pred, y, sets):
         smk_true, smk_pred = smk_acc(y_pred[:,3:6], y[:,3:6])
         acc['smk_true']  = smk_true
         acc['smk_pred'] = smk_pred
-
-    print(acc)
 
 def smk_acc(y_pred, y):
     true = torch.argmax(y, dim=1) 
