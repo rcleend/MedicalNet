@@ -14,7 +14,7 @@ from utils.logger import log
 import pandas as pd
 import numpy as np
 import torch.nn as nn
-import matplotlib as plt
+import matplotlib.pyplot as plt
 from sklearn.metrics import accuracy_score
 from sklearn.metrics import roc_curve, auc
 
@@ -38,7 +38,7 @@ def test(data_loader, model, sets):
         y_pred = model(x)
 
         # Get sigmoid of y_pred and append to all_y_pred
-        all_fvc_pred.append(nn.functional.sigmoid(y_pred[:,2]).cpu().detach().numpy())
+        all_fvc_pred.append(torch.sigmoid(y_pred[:,2]).cpu().detach().numpy())
         all_fvc.append(y[:,2].cpu().detach().numpy())
 
         
