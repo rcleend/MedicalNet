@@ -61,7 +61,7 @@ def train(data_loader, test_loader, model, optimizer, scheduler, total_epochs, s
             y_pred = model(x_batch)
 
             # Calculate loss using mean squared error
-            loss = custom_loss(y_pred.to(torch.float32), y_batch.to(torch.float32)) #/  sets.batch_size
+            loss = custom_loss(y_pred, y_batch) #/  sets.batch_size
 
             update_acc(acc, y_pred, y_batch, sets)
 
@@ -98,7 +98,7 @@ def train(data_loader, test_loader, model, optimizer, scheduler, total_epochs, s
 
                 y_pred = model(x_batch)
 
-                total_loss_test += custom_loss(y_pred.to(torch.float32), y_batch.to(torch.float32))
+                total_loss_test += custom_loss(y_pred, y_batch)
 
 
             writer.add_scalar("Loss/test", total_loss_test / batches_per_epoch, idx)
