@@ -65,7 +65,7 @@ def train(data_loader, test_loader, model, optimizer, scheduler, total_epochs, s
 
             update_acc(acc, y_pred, y_batch, sets)
 
-            log_acc(acc, sets, sets.batch_size)
+            log_acc(acc, sets, 1)
 
             writer.add_scalar("Accuracy/train_fvc", acc['fvc_sum'], idx)
             if sets.multi_task == 'fvc_age':
