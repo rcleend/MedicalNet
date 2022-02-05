@@ -153,7 +153,8 @@ def sex_acc(y_pred, y):
     print('sex y_pred: ', y_pred)
     print('sex y: ', y)
     print('sex pred: ', y_pred > 0.5)
-    return y.cpu().detach().numpy(), (y_pred > 0.5).cpu().detach().numpy()
+    print('sex true: ', y > 0.5)
+    return (y > 0.5).cpu().detach().numpy(), (y_pred > 0.5).cpu().detach().numpy()
 
 
 def rmse(pred, target):
