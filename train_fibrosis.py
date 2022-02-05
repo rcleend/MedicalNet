@@ -146,14 +146,14 @@ def smk_acc(y_pred, y):
     print('smk y', y)
     print('smk pred',true)
     print('smk true',true)
-    return true, pred
+    return true.cpu().detach().numpy(), pred.cpu().detach().numpy()
 
 
 def sex_acc(y_pred, y):
     print('sex y_pred: ', y_pred)
     print('sex y: ', y)
     print('sex pred: ', y_pred > 0.5)
-    return y, y_pred > 0.5
+    return y.cpu().detach().numpy(), (y_pred > 0.5).cpu().detach().numpy()
 
 
 def rmse(pred, target):
