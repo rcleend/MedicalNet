@@ -47,7 +47,7 @@ class CustomLoss(nn.Module):
     def __init__(self, opt):
         super().__init__()
         self.mse = nn.MSELoss()
-        self.bce = nn.BCEWithLogitsLoss()
+        self.bce = nn.BCELoss()
         self.ce = nn.CrossEntropyLoss()
         self.opt = opt
         
