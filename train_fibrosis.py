@@ -67,9 +67,9 @@ def train(data_loader, test_loader, model, optimizer, scheduler, total_epochs, s
 
             log_acc(acc, sets, sets.batch_size)
 
-            writer.add_scalar("Accuracy/train_fvc", acc['fvc_sum'] / sets.batch_size, idx)
+            writer.add_scalar("Accuracy/train_fvc", acc['fvc_sum'], idx)
             if sets.multi_task == 'fvc_age':
-                writer.add_scalar("Accuracy/train_age", acc['age_sum'] / sets.batch_size, idx)
+                writer.add_scalar("Accuracy/train_age", acc['age_sum'], idx)
             elif sets.multi_task == 'meta':
                 writer.add_scalar("Accuracy/train_sex", accuracy_score(acc['sex_true'], acc['sex_pred']), idx)
                 writer.add_scalar("Accuracy/train_smk", accuracy_score(acc['smk_true'], acc['smk_pred']), idx)
