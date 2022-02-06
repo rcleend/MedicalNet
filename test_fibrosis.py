@@ -77,9 +77,11 @@ def test(data_loader, model, sets):
 
         
         # update accuracy
-        # update_acc(acc, y_pred, y, sets)
+        update_acc(acc, y_pred, y, sets)
     print(all_fvc_pred)
     print(all_fvc)
+
+    log_acc(acc, sets, len(data_loader.dataset))
 
 def plot_roc(fpr, tpr, roc_auc):
     plt.figure()
