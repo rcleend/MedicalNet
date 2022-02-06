@@ -84,7 +84,7 @@ def test(data_loader, model, sets):
             print(softmax)
             # all_y_pred[j].append(softmax[:,j].item())
             idx = j + 3
-            all_smk[j].append(y[:,idx].item())
+            all_smk[idx].append(y[:,idx].item())
 
 
         
