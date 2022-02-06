@@ -40,7 +40,8 @@ def test(data_loader, model, sets):
         softmax = nn.functional.softmax(y_pred[:,3:6], dim=1)
         for j in range(3):
             # Get sigmoid of y_pred and append to all_y_pred
-            all_y_pred[j].append(softmax[:,j].item())
+            print(softmax)
+            # all_y_pred[j].append(softmax[:,j].item())
             all_y[j].append(y[:,(j + 3)].item())
 
         
