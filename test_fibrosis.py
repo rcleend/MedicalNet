@@ -30,22 +30,23 @@ def test(data_loader, model, sets):
     else:
         device = torch.device('cpu')
 
-    all_fvc_pred = []
-    all_fvc = []
+    all_y_pred = {3: [], 4:[], 5:[]}
+    all_y = {3: [], 4:[], 5:[]}
     acc = {'fvc_sum': 0, 'age_sum': 0, 'sex_true': [], 'sex_pred': [], 'smk_true': [], 'smk_pred': []}
     for i, (x, y) in enumerate(data_loader):
         x, y = x.to(device), y.to(device)
         y_pred = model(x)
 
-        # Get sigmoid of y_pred and append to all_y_pred
-        all_fvc_pred.append(torch.sigmoid(y_pred[:,2]).item())
-        all_fvc.append(y[:,2].item())
+        for j in range(3,6):
+            # Get sigmoid of y_pred and append to all_y_pred
+            all_y_pred[j].append(torch.sigmoid(y_pred[:,j]).item())
+            all_y.append(y[:,j].item())
 
         
         # update accuracy
         # update_acc(acc, y_pred, y, sets)
-    print(all_fvc_pred)
-    print(all_fvc)
+    print(all_y_pred)
+    print(all_y)
 
     # fpr, tpr, _ = roc_curve(all_fvc, all_fvc_pred)
     # roc_auc = auc(fpr, tpr)
