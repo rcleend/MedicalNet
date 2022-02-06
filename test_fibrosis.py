@@ -59,6 +59,8 @@ def test_smk(data_loader, model, sets):
     # log_acc(acc, sets, len(data_loader.dataset))
 
 def test(data_loader, model, sets):
+
+    # acc = {'fvc_sum': 0, 'age_sum': 0, 'sex_true': [], 'sex_pred': [], 'smk_true': [], 'smk_pred': []}
     if torch.cuda.is_available():
         device = torch.device('cuda')
     else:
@@ -69,7 +71,6 @@ def test(data_loader, model, sets):
     all_smk_pred = {3: [], 4:[], 5:[]}
     all_smk = {3: [], 4:[], 5:[]}
 
-    acc = {'fvc_sum': 0, 'age_sum': 0, 'sex_true': [], 'sex_pred': [], 'smk_true': [], 'smk_pred': []}
     for i, (x, y) in enumerate(data_loader):
         x, y = x.to(device), y.to(device)
         y_pred = model(x)
@@ -87,7 +88,7 @@ def test(data_loader, model, sets):
 
         
         # update accuracy
-        update_acc(acc, y_pred, y, sets)
+        # update_acc(acc, y_pred, y, sets)
     print(all_sex_pred)
     print(all_sex)
     print(all_smk_pred)
