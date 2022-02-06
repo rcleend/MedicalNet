@@ -37,11 +37,11 @@ def test(data_loader, model, sets):
         x, y = x.to(device), y.to(device)
         y_pred = model(x)
 
-        softmax = nn.functional.softmax(y_pred[:,3:6])
+        softmax = nn.functional.softmax(y_pred[:,3:6], dim=1)
         for j in range(3):
             # Get sigmoid of y_pred and append to all_y_pred
             all_y_pred[j].append(softmax[:,j].item())
-            all_y[j].append(y[:,j + 3].item())
+            all_y[j].append(y[:,(j + 3)].item())
 
         
         # update accuracy
