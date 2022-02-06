@@ -64,43 +64,35 @@ def test(data_loader, model, sets):
     else:
         device = torch.device('cpu')
 
-    all_fvc_pred = []
-    all_fvc = []
+    all_sex_pred = []
+    all_sex = []
+    all_smk_pred = {3: [], 4:[], 5:[]}
+    all_smk = {3: [], 4:[], 5:[]}
+
     acc = {'fvc_sum': 0, 'age_sum': 0, 'sex_true': [], 'sex_pred': [], 'smk_true': [], 'smk_pred': []}
     for i, (x, y) in enumerate(data_loader):
         x, y = x.to(device), y.to(device)
         y_pred = model(x)
 
         # Get sigmoid of y_pred and append to all_y_pred
-        all_fvc_pred.append(torch.sigmoid(y_pred[:,2]).cpu().detach().numpy())
-        all_fvc.append(y[:,2].cpu().detach().numpy())
+        all_sex_pred.append(torch.sigmoid(y_pred[:,2]).item())
+        all_sex.append(y[:,2].item())
+
+        softmax = nn.functional.softmax(y_pred[:,3:6], dim=1)
+        for j in range(3):
+            # Get sigmoid of y_pred and append to all_y_pred
+            print(softmax)
+            # all_y_pred[j].append(softmax[:,j].item())
+            all_smk[j].append(y[:,(j + 3)].item())
+
 
         
         # update accuracy
         update_acc(acc, y_pred, y, sets)
-    print(all_fvc_pred)
-    print(all_fvc)
+    print(all_sex_pred)
+    print(all_sex)
 
     log_acc(acc, sets, len(data_loader.dataset))
-
-def plot_roc(fpr, tpr, roc_auc):
-    plt.figure()
-    lw = 2
-    plt.plot(
-        fpr,
-        tpr,
-        color="darkorange",
-        lw=lw,
-        label="ROC curve (area = %0.2f)" % roc_auc,
-    )
-    plt.plot([0, 1], [0, 1], color="navy", lw=lw, linestyle="--")
-    plt.xlim([0.0, 1.0])
-    plt.ylim([0.0, 1.05])
-    plt.xlabel("False Positive Rate")
-    plt.ylabel("True Positive Rate")
-    plt.title("Receiver operating characteristic example")
-    plt.legend(loc="lower right")
-    plt.show()
 
 def log_acc(acc, sets, n_data):
     if sets.multi_task == 'fvc':
