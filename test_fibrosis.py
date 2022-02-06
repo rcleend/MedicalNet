@@ -80,10 +80,8 @@ def test(data_loader, model, sets):
 
         softmax = nn.functional.softmax(y_pred[:,3:6], dim=1)
         for j in range(3):
-            # Get sigmoid of y_pred and append to all_y_pred
-            print(softmax)
-            # all_y_pred[j].append(softmax[:,j].item())
             idx = j + 3
+            all_smk_pred[idx].append(softmax[:,j].item())
             all_smk[idx].append(y[:,idx].item())
 
 
@@ -92,6 +90,9 @@ def test(data_loader, model, sets):
         update_acc(acc, y_pred, y, sets)
     print(all_sex_pred)
     print(all_sex)
+    print(all_smk_pred)
+    print(all_smk)
+
 
     log_acc(acc, sets, len(data_loader.dataset))
 
