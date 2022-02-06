@@ -39,8 +39,8 @@ def test(data_loader, model, sets):
 
         for j in range(3,6):
             # Get sigmoid of y_pred and append to all_y_pred
-            all_y_pred[j].append(torch.sigmoid(y_pred[:,j]).item())
-            all_y.append(y[:,j].item())
+            all_y_pred[j] = torch.sigmoid(y_pred[:,j]).item()
+            all_y[j] = y[:,j].item()
 
         
         # update accuracy
