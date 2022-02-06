@@ -83,7 +83,8 @@ def test(data_loader, model, sets):
             # Get sigmoid of y_pred and append to all_y_pred
             print(softmax)
             # all_y_pred[j].append(softmax[:,j].item())
-            all_smk[j].append(y[:,(j + 3)].item())
+            idx = j + 3
+            all_smk[j].append(y[:,idx].item())
 
 
         
