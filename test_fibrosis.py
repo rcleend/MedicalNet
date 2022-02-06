@@ -24,7 +24,7 @@ from torch.utils.tensorboard import SummaryWriter
 
 mse = nn.MSELoss()
 
-def test(data_loader, model, sets):
+def test_smk(data_loader, model, sets):
     if torch.cuda.is_available():
         device = torch.device('cuda')
     else:
@@ -57,6 +57,29 @@ def test(data_loader, model, sets):
     # roc_auc["micro"] = auc(fpr["micro"], tpr["micro"])
     # print accuracy
     # log_acc(acc, sets, len(data_loader.dataset))
+
+def test(data_loader, model, sets):
+    if torch.cuda.is_available():
+        device = torch.device('cuda')
+    else:
+        device = torch.device('cpu')
+
+    all_fvc_pred = []
+    all_fvc = []
+    acc = {'fvc_sum': 0, 'age_sum': 0, 'sex_true': [], 'sex_pred': [], 'smk_true': [], 'smk_pred': []}
+    for i, (x, y) in enumerate(data_loader):
+        x, y = x.to(device), y.to(device)
+        y_pred = model(x)
+
+        # Get sigmoid of y_pred and append to all_y_pred
+        all_fvc_pred.append(torch.sigmoid(y_pred[:,2]).cpu().detach().numpy())
+        all_fvc.append(y[:,2].cpu().detach().numpy())
+
+        
+        # update accuracy
+        # update_acc(acc, y_pred, y, sets)
+    print(all_fvc_pred)
+    print(all_fvc)
 
 def plot_roc(fpr, tpr, roc_auc):
     plt.figure()
